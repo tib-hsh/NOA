@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="PaperDownloader:jar">
+    <output-path>$PROJECT_DIR$/../PaperDownloader/out/artifacts/PaperDownloader_jar</output-path>
+    <root id="archive" name="PaperDownloader.jar">
+      <element id="module-output" name="PaperDownloader" />
+    </root>
+  </artifact>
+</component>

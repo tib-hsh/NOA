@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Class-Path: de.hsh.textmining
+Main-Class: de.hsh.textmining.Main
+
