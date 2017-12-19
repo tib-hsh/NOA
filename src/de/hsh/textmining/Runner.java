@@ -21,7 +21,6 @@ public class Runner implements Runnable
 	public void run()
 	{
 		String[] split = s.split(" ");
-		//System.out.println(spli);
 		byte[] img=null;
 		try
 		{
@@ -57,7 +56,6 @@ public class Runner implements Runnable
 	{
 		Path pathToFile = Paths.get(s);
 		Files.createDirectories(pathToFile.getParent());
-		//Files.createFile(pathToFile);
 		FileOutputStream fos = new FileOutputStream(s);
 		fos.write(img);
 		fos.close();
@@ -71,9 +69,8 @@ public class Runner implements Runnable
 		java.net.URL u = new URL(url);
 		HttpURLConnection huc =  (HttpURLConnection)u.openConnection ();
 		huc.setRequestMethod ("HEAD");
-		huc.connect () ;
-		int code = huc.getResponseCode() ;
-		int statusCode=code;
+		huc.connect();
+		int statusCode=huc.getResponseCode() ;
 		if(statusCode!=404)
 		{
 			InputStream in;

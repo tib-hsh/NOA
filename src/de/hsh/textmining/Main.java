@@ -11,14 +11,14 @@ import java.util.stream.Stream;
 public class Main {
     static int counter=0;
     private static final int NTHREDS = 10;
-    static ExecutorService executor=Executors.newFixedThreadPool(NTHREDS);;
+    private static ExecutorService executor=Executors.newFixedThreadPool(NTHREDS);
 
     public static void main(String[] args) {
 
         System.out.println("Start PaperDownloader on file  "+args[0] );
         //read file into stream, try-with-resources
         try (Stream<String> stream = Files.lines(Paths.get(args[0]))) {
-
+            //Create Task and hand it over to Executor
             stream.forEach(Main::CreateTask);
 
         } catch (IOException e) {
@@ -27,13 +27,14 @@ public class Main {
         executor.shutdown();
         // Wait until all threads are finish
         try {
+            //Expecting long runtime :D
             executor.awaitTermination(200,TimeUnit.DAYS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         System.out.println("Finished all threads");
     }
-    public static void CreateTask(String s)
+    private static void CreateTask(String s)
     {
         Runnable worker = new Runner(s);
         executor.execute(worker);
