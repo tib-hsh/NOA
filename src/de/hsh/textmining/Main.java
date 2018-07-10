@@ -25,7 +25,7 @@ public class Main {
             e.printStackTrace();
         }
         executor.shutdown();
-        // Wait until all threads are finish
+        // Wait until all threads are finished
         try {
             //Expecting long runtime :D
             executor.awaitTermination(200,TimeUnit.DAYS);
