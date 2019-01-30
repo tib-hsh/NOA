@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="NOA_Plumber:jar">
+    <output-path>$PROJECT_DIR$/../NOA_Plumber/out/artifacts/NOA_Plumber_jar</output-path>
+    <root id="archive" name="NOA_Plumber.jar">
+      <element id="module-output" name="NOA_Plumber" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/json/json/20180813/json-20180813.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

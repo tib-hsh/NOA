@@ -1,0 +1,157 @@
+{
+    "name": "exampletestPipe",
+
+    "mongoIP":"IP",
+    "mongoPort":"27017",
+    "mongoDefaultDB":"defaultDB",
+    
+    "repeating":true,
+    "freqType": "min",
+    "freqValue": 1,
+
+    "program": [
+        {
+            "name":"Move File",
+            "type":"FSRename",
+            "step":0,
+            "activated":true,
+            "requrires":[],
+            "timestamp":true,
+            "params":[                
+                {"name":"source",
+                    "value":"dirPath"},
+                {"name":"target",
+                 "value":"C:\\dirPath"}
+            ]
+        },
+        {
+            "name":"Mongo DROP",
+            "type":"mongoDrop",
+            "step":1,
+            "activated":false,
+            "requrires":[],
+            "params":[
+                {"name":"target_db",
+                    "value":"dbname"},
+                {"name":"target_col",
+                    "value":"collectioname"}
+            ]
+        },
+        {
+            "name":"Mongo Copy",
+            "type":"mongoCopy",
+            "step":2,
+            "activated":false,
+            "requrires":[],
+            "params":[
+                {"name":"source_db",
+                    "value":"dbname"},
+                {"name":"target_db",
+                    "value":"dbname"},
+                {"name":"collectioname",
+                    "value":"co"},
+                {"name":"target_col",
+                    "value":"collectioname"}
+            ]
+
+        },
+        {
+        "name": "PaperParser",
+        "desc": "This will ParsePapers and put everything into the MongoDB",
+        "type": "jar",
+        "pathTo": "LocOfJar",
+        "fileName":"nameOfJar",
+        "output": "log/prog/both",
+        "requrires": [],
+        "remote":false,
+        "printError":false,
+        "step": 3,
+        "activated": false,
+        "params": [
+        {
+            "name": "mongoIP",
+            "value": "IP"
+        },
+        {
+            "name": "mongoPort",
+            "value": "27017"
+        },        
+        {
+            "name": "mongoDatabase",
+            "value": "DBName"
+        },
+        {
+            "name": "mongoCollection_Journal",
+            "value": "NOA_Journals"
+        },
+        {
+            "name": "mongoCollection_Image_Temp",
+            "value": "NOA_Images"
+        },
+        {
+            "name": "mongoCollection_Error",
+            "value": "NOA_Errors"
+        },
+        {
+            "name": "paperLoc",
+            "value": "PaperLocation"
+        },
+        {
+            "name": "verbose",
+            "value": "2"
+        }]
+    
+    },
+
+
+    {
+        "name": "PaperDownloader",
+        "desc": "This will ParsePapers DownloadImages",
+        "type": "py",
+        "pathTo": "/home/noa",
+        "fileName":"ImageDownloader.py",
+        "requrires": [],
+        "output": "log/prog/both",
+        "printError":false,
+        "remote":true,
+        "connection":
+        {
+            "remoteIP":"IP",
+            "remotePort":"SSHPort",
+            "remoteUser":"Username",
+            "remotePw":"Password"
+        },
+        "step": 4,
+        "activated": false,
+        "params": [
+        {
+            "name": "mongoIP",
+            "value": "IP"
+        },
+        {
+            "name": "mongoPort",
+            "value": "27017"
+        },        
+        {
+            "name": "mongoDatabase",
+            "value": "dbname"
+        },
+        {
+            "name": "mongoCollectionImage",
+            "value": "collectioname"
+        },
+        {
+            "name": "targetDir",
+            "value": "/home/noa/images"
+        },
+        {
+            "name": "download",
+            "value": "True"
+        },        
+        {
+            "name": "verbose",
+            "value": "2"
+        }]
+    
+    }]
+}

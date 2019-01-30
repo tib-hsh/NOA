@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="Mongo_Organizer" target="1.5" />
+      <module name="NOA_Plumber" target="1.7" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
