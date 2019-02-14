@@ -1,0 +1,38 @@
+Land- und Forstwirtschaft u.a.;Agriculture and forestry
+Geowissenschaften;Earth Sciences
+Geographie;Geography
+Elektrotechnik,  Mess- und Regelungstechnik;Electrical Engineering, Measurement and Control Engineering
+Physik;Physics
+Biologie;Biology
+Architektur, Bauingenieur- und Vermessungswesen;Architecture, Civil Engineering and Surveying
+Energie, Umweltschutz, Kerntechnik;Energy, Environmental Protection
+Naturwissenschaft allgemein;Science in General
+Ethnologie (Volks- und Völkerkunde);Ethnology
+Mathematik;Mathematics
+Verfahrenstechnik, Biotechnologie;Process Engineering, Biotechnology
+Chemie und Pharmazie;Chemistry and Pharmacy
+Medien- und Kommunikationswissenschaften, Publizistik;Media and Communication Science, Journalism
+Medizin;Medicine
+Informatik;Computer Science
+Pädagogik;Education
+Maschinenwesen, Werkstoffwissenschaften;Mechanical Engineering, Materials Science
+Psychologie;Psychology
+Informations-, Buch- und Bibliothekswesen;Library and Information Science
+Soziologie;Sociology
+Allgemeines, Fachübergreifendes;General
+Technik allgemein;General Technology
+Wirtschaftswissenschaften;Economics
+Archäologie;Archeology
+Rechtswissenschaft;Law
+Politologie;Politics
+Allgemeine Sprach- und Literaturwissenschaft;Linguistics and Literature
+Philosophie;Philosophy
+Theologie und Religionswissenschaft;Theology and Religious Studies
+Germanistik. Niederländische Philologie. Skandinavistik;Linguistics and Literature
+Kunstgeschichte;Art History
+Slavistik;Linguistics and Literature
+Geschichte;History
+Wissenschaftskunde, Forschung, Hochschul-, Museumswesen;Research and Higher Education
+Klassische Philologie. Byzantinistik u.a.;Linguistics and Literature
+Sport;Sports
+Anglistik. Amerikanistik;Linguistics and Literature
