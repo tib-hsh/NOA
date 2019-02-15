@@ -216,7 +216,7 @@ if ($document === null) {
                                 foreach ($document->wmcat as $value) {
                                     ?>
                                     <div id="ck-button">
-                                        <label style="font-weight:500"><input id="<?php print_r($value . "0"); ?>" type="checkbox" hidden><span><?php print_r($value); ?></span></label>
+                                        <label style="font-weight:500"><input id="<?php print_r($value); ?>" type="checkbox" hidden><span><?php print_r($value); ?></span></label>
                                     </div>
                                 <?php }
                                 ?>
