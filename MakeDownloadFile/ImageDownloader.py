@@ -48,7 +48,8 @@ for f in findings:
     with open("D:\Image_Files_URLS_betaCorpus_vtest1.txt", 'a', encoding="utf-8") as myfile:
         print(path)
         print(URL)
-        myfile.write(URL + " " + root + path + str(findingID) + ".jpg" + "\n")
+        extension = URL.split('.')[-1]
+        myfile.write(URL + " " + root + path + str(findingID) + "." + extension + "\n")
 print("end")
 print(imagecount)
 print("Image URLs found")
