@@ -208,7 +208,7 @@ public class MongoDBRepo
 						String inputLine;
 						int n = 0;
 						while ((inputLine = in.readLine()) != null && n < 10) {
-							if (inputLine.contains("File or directory not found")) {
+							if (inputLine.contains("File or directory not found")||inputLine.contains("Object Moved")) {
 								s = "https://www.hindawi.com/journals/" + rsj.getPublisherId() + "/" + rsj.getPublicationYear() + "/" + a.getGraphicDOI() + ".svgz";
 								in.close();
 								break;
