@@ -9,12 +9,6 @@ import metadata.Citation;
 import metadata.ID;
 import org.bson.Document;
 import org.bson.types.ObjectId;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -154,7 +148,7 @@ public class MongoDBRepo
 			pdate = null;
 		}
 
-		Boolean tested = false;
+
 
 
 		//set licenseType
@@ -177,7 +171,6 @@ public class MongoDBRepo
 		}
 
 		for (Result a : rsj.getResultList()) {
-
 			String s = "";
 			if (rsj.getXMLPathComplete().contains("PMC")) {
 				s = "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC" + rsj.getPmcID() + "/bin/" + a.getGraphicDOI() + ".jpg";
@@ -200,28 +193,8 @@ public class MongoDBRepo
 				} catch (Exception e) {
 					link = "no valid URL found";
 				}
-				s = "https://www.hindawi.com/journals/" + rsj.getPublisherId() + "/" + link + ".jpg";
-				if (!tested) {
-					try {
-						URL hindawiTest = new URL(s);
-						BufferedReader in = new BufferedReader(new InputStreamReader(hindawiTest.openStream()));
-						String inputLine;
-						int n = 0;
-						while ((inputLine = in.readLine()) != null && n < 10) {
-							if (inputLine.contains("File or directory not found")) {
-								s = "https://www.hindawi.com/journals/" + rsj.getPublisherId() + "/" + rsj.getPublicationYear() + "/" + a.getGraphicDOI() + ".svgz";
-								in.close();
-								break;
-							}
-							n++;
-							tested = true;
-						}
-					} catch (MalformedURLException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
+				s = ("https://www.hindawi.com/journals/" + rsj.getPublisherId() + "/" + link + ".jpg").toLowerCase();
+
 			} else if (rsj.getXMLPathComplete().matches(".*[sS]pringer.*")) {
 
 				String newDoi = rsj.getJournalDOI().substring(0, 7) + "%2F" + rsj.getJournalDOI().substring(8);
