@@ -171,6 +171,7 @@ public class MongoDBRepo
 		}
 
 		for (Result a : rsj.getResultList()) {
+
 			String s = "";
 			if (rsj.getXMLPathComplete().contains("PMC")) {
 				s = "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC" + rsj.getPmcID() + "/bin/" + a.getGraphicDOI() + ".jpg";
