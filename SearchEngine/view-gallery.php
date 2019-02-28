@@ -87,7 +87,7 @@
                                 ?>
                             </label>
                             <label for="table" id="normal-modalG<?php echo $counter; ?>" class="get-position-right" style="float:left;">
-                                <div style="min-width:40%;float:left"><img class="img-responsive" style="float:right;margin-right:20px;height:100%;max-width:700px;max-height:600px" alt="No preview available" src="<?php print_r($document->url); ?>"/></div>                             
+                                <div style="min-width:40%;float:left"><img class="img-responsive" style="float:right;margin-right:20px;height:100%;max-width:700px;max-height:600px" alt="No preview available" src="loadimg.php?src=<?php print_r(urlencode($document->tiburl)); ?>"/></div>                             
                                 <div class="hiddenmetadata">
                                     <div class='cite-author'>
                                         <?php
