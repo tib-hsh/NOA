@@ -34,3 +34,23 @@ Produces a download file from the MongoDB image database that can be use by ImgD
 
 ## ImgDownloader
 Downloads images from different sources in multiple threads. Input is a file with lines structured like this: [image source] [image destination]
+
+## NOA-Plumber
+Work in progress. This will be the pipeline that integrates all the programs above.
+
+## Search Engine
+This is the interface for the search engine currently at noa.wp.hs-hannover.de. It includes two ways to upload images to Wikimedia Commons: 1. Using the random upload tool, which will show random images and let the user decide whether to upload or not. 2. Uploading images from the search results. Both function upload images under the user's own account.
+
+## Wikipedia Categories
+Adds categories from Wikipedia to images.
+
+## addWMIDs
+Adds the corresponding items from Wikidata and categories from Wikimedia Commons to the Wikipedia Categories.
+
+## addDiscipline
+Adds disciplines to articles using the categorization from https://rzblx1.uni-regensburg.de/ezeit/.
+
+
+
+## Contributors
+Jean Charbonnier, Lucia Sohmen, Frieda Josi, Christian Wartena, Birte Rohden, Janko Happe
