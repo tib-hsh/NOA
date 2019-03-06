@@ -44,7 +44,7 @@ function isUploaded() {
         'srlimit' => '50',
         'srnamespace' => '6',
         'format' => 'json',
-        'srsearch' => $doi
+        'srsearch' => '"' . $doi . '"'
     ];
 
     $ch = curl_init('https://commons.wikimedia.org/w/api.php');
@@ -69,8 +69,10 @@ function isUploaded() {
     }
 
     $first_sentence_of_caption = explode(".", $caption)[0];
-    if (strlen($first_sentence_of_caption) == 0) {
-        return false;
+	if (strlen($first_sentence_of_caption) == 0) {
+        $first_sentence_of_caption = $caption;
+    } else if (strlen($first_sentence_of_caption) < 6 && strlen($caption) >= 6) {
+        $first_sentence_of_caption = substr($caption, 0, 6);;
     }
     $query_string = $doi . " " . $first_sentence_of_caption;
 
