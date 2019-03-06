@@ -82,6 +82,10 @@ $filterList = ["study area", "experiment", "(a)", "framework", "proposed", "test
 for ($i = 0; $i < count($response->response->docs); $i++) {
     $tempDocument = $response->response->docs[$i];
 
+    if($tempDocument->copyrightflag == "true") {
+		continue;
+	}
+    
     $filter = false;
     foreach ($filterList as $keyword) {
         if (stripos($tempDocument->caption, $keyword) !== false) {
