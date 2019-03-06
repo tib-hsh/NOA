@@ -2,15 +2,11 @@ import com.mongodb.*;
 import org.bson.types.ObjectId;
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-
-import static com.mongodb.Bytes.QUERYOPTION_NOTIMEOUT;
 
 /**
  * Created by SohmenL on 07.11.2018.
