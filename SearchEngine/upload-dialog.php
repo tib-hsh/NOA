@@ -43,7 +43,7 @@
     <script>
         var btn = document.getElementById("uploadButton<?php echo $id; ?>");
         btn.onclick = function () {
-            uploadtool('upload', '<?php echo json_encode($document); ?>', '<?php echo $id; ?>', null);
+            uploadtool('upload', '<?php echo str_replace("'", "\'", json_encode($document)); ?>', '<?php echo $id; ?>', null);
         }
     </script>
     <div id="success<?php echo $id; ?>" style="padding-top:10px;display:none;"><font size="+1">Success! You can view your upload <a id="linkToImage<?php echo $id; ?>" target="_blank" href="" ><font color="blue"><u>here</u></font></a>.</font></div>

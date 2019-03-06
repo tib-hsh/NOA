@@ -234,7 +234,7 @@ if ($document === null) {
                             <script>
                                 var btn = document.getElementById("uploadButton");
                                 btn.onclick = function () {
-                                    uploadtool('uploadConfirmation', '<?php echo json_encode($document); ?>', '', null);
+                                    uploadtool('uploadConfirmation', '<?php echo str_replace("'", "\'", json_encode($document)); ?>', '', null);
                                 }
                             </script>
                         <?php } else { ?>   
@@ -245,7 +245,7 @@ if ($document === null) {
                                 <script>
                                     var btn = document.getElementById("uploadButton");
                                     btn.onclick = function () {
-                                        uploadtool('markForUpload', '<?php echo json_encode($document); ?>', '', null);
+                                        uploadtool('markForUpload', '<?php echo str_replace("'", "\'", json_encode($document)); ?>', '', null);
                                     }
                                 </script>
                             <?php } ?>  
@@ -255,7 +255,7 @@ if ($document === null) {
                             <script>
                                 var btn = document.getElementById("nextButton");
                                 btn.onclick = function () {
-                                    uploadtool('next', '<?php echo json_encode($document); ?>', '', '<?php print_r($discipline); ?>');
+                                    uploadtool('next', '<?php echo str_replace("'", "\'", json_encode($document)); ?>', '', '<?php print_r($discipline); ?>');
                                 }
                             </script>
                             <?php if ($wikiUsername != NULL) { ?>        
