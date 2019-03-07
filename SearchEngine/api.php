@@ -7,7 +7,7 @@ if (empty($_GET)) {
 
 header("Content-Type: application/json");
 
-$inifile = 'data/config.ini';
+$inifile = "$_SERVER[DOCUMENT_ROOT]/../conf/config.ini";
 $ini = parse_ini_file($inifile);
 
 $query = (array_key_exists('query', $_GET) ? $_GET['query'] : '*');

@@ -6,7 +6,7 @@ Marks image which is passed by uploadtool.js for upload in mysql db
 $document = json_decode($_GET['document']);
 $url = $document->url;
 
-$inifile = 'data/config.ini';
+$inifile = "$_SERVER[DOCUMENT_ROOT]/../conf/config.ini";
 $ini = parse_ini_file($inifile);
 $servername = $ini['mysqlServer'];
 $username = $ini['mysqlUser'];

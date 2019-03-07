@@ -9,7 +9,7 @@ session_set_cookie_params(
         $params['lifetime'], dirname($_SERVER['SCRIPT_NAME'])
 );
 
-$inifile = 'data/config.ini';
+$inifile = "$_SERVER[DOCUMENT_ROOT]/../conf/config.ini";
 $ini = parse_ini_file($inifile);
 
 $gUserAgent = $ini['agent'];

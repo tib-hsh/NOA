@@ -3,7 +3,7 @@
 This page displays the images that have been uploaded to Wikimedia Commons via the NOA Upload Tool
 */
 
-$inifile = 'data/config.ini';
+$inifile = "$_SERVER[DOCUMENT_ROOT]/../conf/config.ini";
 $ini = parse_ini_file($inifile);
 
 $servername = $ini['mysqlServer'];
