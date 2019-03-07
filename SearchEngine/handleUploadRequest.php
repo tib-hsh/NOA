@@ -30,8 +30,6 @@ if (count($document->author) > 1) {
     $firstauthor = $firstauthor . ". ";
 }
 
-
-$text = "=={{int:filedesc}}== \n{{Information\n|description={{en|1=" . $document->caption . "}}\n|date=" . $date . "\n|source=" . $firstauthor . "&quot;" . trim($document->title) . "&quot;, " . $document->journal . " [https://doi.org/" . $document->doi . " doi:" . $document->doi . "]\n|author=" . $authors . "\n|permission=" . $document->license . "\n|other_versions=\n}}\n=={{int:license-header}}=={{" . $document->licensetype . "}}\n[[Category:Uploads from NOA project]]" . $categories;
 $externalurl = $document->url;
 $doi = $document->doi;
 
@@ -115,6 +113,40 @@ if (isUploaded()) {
 
     $csrftoken = $res->query->tokens->csrftoken;
 
+	$journal = $document->journal;
+    $res = doApiQuery(array(
+        'format' => 'json',
+        'action' => 'query',
+        'prop' => 'categoryinfo',
+        'titles' => 'Category:Media from ' . $journal
+            ), $ch, null);
+
+    //if category doesn't exist create new category with publisher as super category
+    if (property_exists($res->query->pages, "-1")) {
+        $superCategory = "";
+        if (strpos($document->publisher, 'Hindawi') !== false) {
+            $superCategory = "Media from Hindawi";
+        } else if (strpos($document->publisher, 'Frontiers') !== false) {
+            $superCategory = "Media from Frontiers journals";
+        } else if (strpos($document->publisher, 'Copernicus') !== false) {
+            $superCategory = "Media from Copernicus";
+        } else {
+            $superCategory = "Media from scholarly journals";
+        }
+        $res = doApiQuery(array(
+            'format' => 'json',
+            'action' => 'edit',
+            'title' => 'Category:Media from ' . $journal,
+            'token' => $csrftoken,
+            'createonly' => true,
+            'text' => '{{hiddencat}}[[Category:' . $superCategory . '|' . $journal . ']]'
+                ), $ch, null);
+    }
+    $categories = $categories . "\n[[Category:Media from " . $journal . "]]";
+
+    $text = "=={{int:filedesc}}== \n{{Information\n|description={{en|1=" . $document->caption . "}}\n|date=" . $date . "\n|source=" . $firstauthor . "&quot;" . trim($document->title) . "&quot;, " . $document->journal . " [https://doi.org/" . $document->doi . " doi:" . $document->doi . "]\n|author=" . $authors . "\n|permission=" . $document->license . "\n|other_versions=\n}}\n=={{int:license-header}}=={{" . $document->licensetype . "}}\n[[Category:Uploads from NOA project]]" . $categories;
+
+	
     //try to upload file via Wikimedia API
     $params = array('action' => 'upload', 'filename' => $filename, 'text' => $text, 'format' => 'json', 'token' => $csrftoken, 'file' => $cFile, 'comment' => 'Uploaded by the NOA Upload Tool');
     $res = doApiQuery($params, $ch, "upload");
