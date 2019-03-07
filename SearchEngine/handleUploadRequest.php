@@ -113,36 +113,45 @@ if (isUploaded()) {
 
     $csrftoken = $res->query->tokens->csrftoken;
 
-	$journal = $document->journal;
+    $journal = $document->journal;
+    $journalCategory = 'Media from ' . $journal;
     $res = doApiQuery(array(
         'format' => 'json',
         'action' => 'query',
         'prop' => 'categoryinfo',
-        'titles' => 'Category:Media from ' . $journal
+        'titles' => 'Category:Media from ' . $journal . '|' . 'Images from ' . $journal
             ), $ch, null);
 
+
     //if category doesn't exist create new category with publisher as super category
-    if (property_exists($res->query->pages, "-1")) {
-        $superCategory = "";
-        if (strpos($document->publisher, 'Hindawi') !== false) {
-            $superCategory = "Media from Hindawi";
-        } else if (strpos($document->publisher, 'Frontiers') !== false) {
-            $superCategory = "Media from Frontiers journals";
-        } else if (strpos($document->publisher, 'Copernicus') !== false) {
-            $superCategory = "Media from Copernicus";
+    if (property_exists($res->query->pages, '-1')) {
+        if (!property_exists($res->query->pages, '-2')) {
+            if($res->query->pages->{'-1'}->title == "Media from " . $journal) {
+                $journalCategory = 'Images from ' . $journal;
+            }
         } else {
-            $superCategory = "Media from scholarly journals";
+            $superCategory = '';
+            if (strpos($document->publisher, 'Hindawi') !== false) {
+                $superCategory = 'Media from Hindawi';
+            } else if (strpos($document->publisher, 'Frontiers') !== false) {
+                $superCategory = 'Media from Frontiers journals';
+            } else if (strpos($document->publisher, 'Copernicus') !== false) {
+                $superCategory = 'Media from Copernicus';
+            } else {
+                $superCategory = 'Media from scholarly journals';
+            }
+            $res = doApiQuery(array(
+                'format' => 'json',
+                'action' => 'edit',
+                'title' => 'Category:Media from ' . $journal,
+                'token' => $csrftoken,
+                'createonly' => true,
+                'text' => '{{hiddencat}}[[Category:' . $superCategory . '|' . $journal . ']]'
+                    ), $ch, null);
         }
-        $res = doApiQuery(array(
-            'format' => 'json',
-            'action' => 'edit',
-            'title' => 'Category:Media from ' . $journal,
-            'token' => $csrftoken,
-            'createonly' => true,
-            'text' => '{{hiddencat}}[[Category:' . $superCategory . '|' . $journal . ']]'
-                ), $ch, null);
     }
-    $categories = $categories . "\n[[Category:Media from " . $journal . "]]";
+
+    $categories = $categories . "\n[[Category:" . $journalCategory . "]]";
 
     $text = "=={{int:filedesc}}== \n{{Information\n|description={{en|1=" . $document->caption . "}}\n|date=" . $date . "\n|source=" . $firstauthor . "&quot;" . trim($document->title) . "&quot;, " . $document->journal . " [https://doi.org/" . $document->doi . " doi:" . $document->doi . "]\n|author=" . $authors . "\n|permission=" . $document->license . "\n|other_versions=\n}}\n=={{int:license-header}}=={{" . $document->licensetype . "}}\n[[Category:Uploads from NOA project]]" . $categories;
 
