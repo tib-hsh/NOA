@@ -1,5 +1,20 @@
 # NOA
-This repository contains all code from the NOA project (noa.wp.hs-hannover.de). More documentation will be added soon.
+This repository contains all code from the NOA project (noa.wp.hs-hannover.de). The project collects scientific open access articles, extracts images and corresponding metadata and adds further enriching data. The images can accessed via a search engine using Solr. From there, they can uploaded to Wikimedia Commons.
+
+The code represents the full pipeline of the project which is as following:
+
+1. Download articles from different sources
+
+2. Parse the article content and metadata into a MongoDB collection.
+
+3. Download the images.
+
+4. Add more metadata such as image types and Wikipedia categories.
+
+5. Create the search index.
+
+
+**Note:** This repository is a work in progress. The code is not complete yet and there may still be errors. More code and changes will be added as the project evolves.
 
 ## Add Wikimedia Categories
 This programs finds all distinct Wikipedia Categories in a MongoDB, writes them into a new database and adds the corresponding categories from Wikimedia Commons as well as Wikidata items. It then adds the Wikimedia Commons categories to the original database. The created database can be deleted. The wikidata items are not added to the original database. This can be done with small changes to the source code.
