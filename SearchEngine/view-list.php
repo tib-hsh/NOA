@@ -93,7 +93,7 @@
                         <td>Paper:</td>
                         <td class='cite-paper'>
                             <a target="_blank" href="https://doi.org/<?php print_r($document->doi); ?>">
-                                <?php print_r($document->title); ?>
+                                <u><?php print_r(rtrim($document->title)); ?></u>
                                 <span class="glyphicon glyphicon-new-window"/>
                             </a>
                         </td>
@@ -159,7 +159,7 @@
                                         <form action="search.php" method="get" style="float:left;">
                                             <input type="hidden" value='cat:"<?php print_r($document->cat[$i]) ?>"' name="suchbegriff">
                                             <input type ="hidden" name="start" value="0">
-                                            <button type="submit" class="category"><?php print_r($document->cat[$i]) ?> <span class="glyphicon glyphicon-new-window"/></button>
+                                            <button type="submit" class="category"><u><?php print_r($document->cat[$i]) ?></u> <span class="glyphicon glyphicon-new-window"/></button>
                                         </form>
                                     </div>
                                     <?php
