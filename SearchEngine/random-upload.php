@@ -35,86 +35,90 @@ $options = array
 $client = new SolrClient($options);
 $client->setServlet(SolrClient::SEARCH_SERVLET_TYPE, "noaselect");
 
+$document = null;
+while ($document === null) {
+    // http://php.net/manual/en/class.solrquery.php
+    $query = new SolrQuery();
 
-// http://php.net/manual/en/class.solrquery.php
-$query = new SolrQuery();
+    $query->setQuery($suchTerm);
+    $query->setRows(30);
+    $query->setStart(0);
 
-$query->setQuery($suchTerm);
-$query->setRows(30);
-$query->setStart(0);
+    $query->addFilterQuery('imtype:"Photo" OR imtype:"Drawing" OR imtype:"Scan"');
+    $query->addFilterQuery('NOT discipline:""');
+    $query->addFilterQuery('caption:[* TO *] AND title:[* TO *] AND author:[* TO *]');
 
-$query->addFilterQuery('NOT licensetype:"unclassified" AND NOT licensetype:"frontiers" AND NOT licensetype:"cc-by-2.0"');
-$query->addFilterQuery('imtype:"Photo" OR imtype:"Drawing" OR imtype:"Scan"');
-$query->addFilterQuery('NOT discipline:""');
-//$query->addFilterQuery('copyrightflag:"false"');
-$query->addFilterQuery('caption:[* TO *] AND title:[* TO *] AND author:[* TO *]');
+    $query->addFacetField('{!ex=dsc,imt}discipline')->setFacetMinCount(2);
+    if ($discipline != null) {
+        $query->addFilterQuery('{!tag=dsc}discipline:"' . $discipline . '"');
+    }
 
-$query->addFacetField('{!ex=dsc,imt}discipline')->setFacetMinCount(2);
-if ($discipline != null) {
-    $query->addFilterQuery('{!tag=dsc}discipline:"' . $discipline . '"');
-}
+    $query->setFacet(true);
 
-$query->setFacet(true);
+    $randString = mt_rand();
+    $query->addSortField('random_' . $randString, 1);
 
-$randString = mt_rand();
-$query->addSortField('random_' . $randString, 1);
+    //get 30 random images
+    $query_response = $client->query($query);
+    $response = $query_response->getResponse();
 
-//get 30 random images
-$query_response = $client->query($query);
-$response = $query_response->getResponse();
+    $servername = $ini['mysqlServer'];
+    $username = $ini['mysqlUser'];
+    $password = $ini['mysqlPassword'];
+    $dbname = $ini['mysqlDB'];
 
-$servername = $ini['mysqlServer'];
-$username = $ini['mysqlUser'];
-$password = $ini['mysqlPassword'];
-$dbname = $ini['mysqlDB'];
+    $conn = new mysqli($servername, $username, $password, $dbname);
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    $minViewCount = PHP_INT_MAX;
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-$minViewCount = PHP_INT_MAX;
+    //Don't show images which contain these words
+    $filterList = ["study area", "experiment", "(a)", "framework", "proposed", "test", " our ", "simulation", " b "];
 
-//Don't show images which contain these words
-$filterList = ["study area", "experiment", "(a)", "framework", "proposed", "test", " our ", "simulation", " b "];
+    //choose a image which has not been viewed yet, or the image with the lowest view count
+    for ($i = 0; $i < count($response->response->docs); $i++) {
+        $tempDocument = $response->response->docs[$i];
 
-//choose a image which has not been viewed yet, or the image with the lowest view count
-for ($i = 0; $i < count($response->response->docs); $i++) {
-    $tempDocument = $response->response->docs[$i];
-
-    if($tempDocument->copyrightflag == "true") {
-		continue;
-	}
-    
-    $filter = false;
-    foreach ($filterList as $keyword) {
-        if (stripos($tempDocument->caption, $keyword) !== false) {
-            $filter = true;
+        if ($tempDocument->copyrightflag == "true") {
+            continue;
         }
-    }
-    if ($filter) {
-        continue;
-    }
-    //filter out medical images unless this discipline was chosen by the user
-    if (endsWith($tempDocument->url, ".pdf") || $tempDocument->caption == null || (in_array("Medicine", $tempDocument->discipline) && $discipline != "Medicine")) {
-        continue;
-    }
-    $sql = "SELECT VIEWS, UPLOADED FROM `viewedimages` WHERE HASH =\"" . hash("md5", $tempDocument->url) . "\"";
-    $result = $conn->query($sql);
-    if (mysqli_fetch_assoc($conn->query($sql)) === null) {
-        $document = $tempDocument;
-        break;
-    } else if (mysqli_fetch_assoc($conn->query($sql))['UPLOADED'] == 1) {
-        continue;
-    } else {
-        $viewCount = mysqli_fetch_assoc($conn->query($sql))['VIEWS'];
-        if ($viewCount < $minViewCount) {
+        
+        if ($tempDocument->licensetype == "unclassified" || $tempDocument->licensetype == "frontiers" || $tempDocument->licensetype == "cc-by-2.0") {
+            continue;
+        }
+
+        $filter = false;
+        foreach ($filterList as $keyword) {
+            if (stripos($tempDocument->caption, $keyword) !== false) {
+                $filter = true;
+            }
+        }
+        if ($filter) {
+            continue;
+        }
+        //filter out medical images unless this discipline was chosen by the user
+        if (endsWith($tempDocument->url, ".pdf") || $tempDocument->caption == null || (in_array("Medicine", $tempDocument->discipline) && $discipline != "Medicine")) {
+            continue;
+        }
+        $sql = "SELECT VIEWS, UPLOADED FROM `viewedimages` WHERE HASH =\"" . hash("md5", $tempDocument->url) . "\"";
+        $result = $conn->query($sql);
+        if (mysqli_fetch_assoc($conn->query($sql)) === null) {
             $document = $tempDocument;
-            $minViewCount = $viewCount;
+            break;
+        } else if (mysqli_fetch_assoc($conn->query($sql))['UPLOADED'] == 1) {
+            continue;
+        } else {
+            $viewCount = mysqli_fetch_assoc($conn->query($sql))['VIEWS'];
+            if ($viewCount < $minViewCount) {
+                $document = $tempDocument;
+                $minViewCount = $viewCount;
+            }
         }
     }
+    $conn->close();
 }
-$conn->close();
 
 if ($document === null) {
     echo "Something went wrong";
