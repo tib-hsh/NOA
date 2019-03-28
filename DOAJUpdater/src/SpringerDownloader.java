@@ -9,11 +9,11 @@ import java.nio.channels.ReadableByteChannel;
 
 public class SpringerDownloader {
 
-	public static void downloadArticle(String doi) throws IOException {
+	public static void downloadArticle(String doi, String outputFolder) throws IOException {
 		
 		String url = "http://api.springer.com/openaccess/app?api_key=4df688ea8f1b339c208d1b8ef316f174&q=doi%3A" + doi;
 		if(!Updater.exists(url)) {
-			FileWriter writer = new FileWriter("NewArticleDOIs/NotDownloaded.txt", true);
+			FileWriter writer = new FileWriter(outputFolder + "NewArticleDOIs/NotDownloaded.txt", true);
 			writer.write(doi + System.lineSeparator());
 			writer.close();
 			return;
@@ -23,7 +23,7 @@ public class SpringerDownloader {
 	        URL website = new URL(url);
 	        ReadableByteChannel rbc = Channels.newChannel(website.openStream());
 	        doi = doi.replaceAll("/", "_");
-	        String filePath = "DownloadedArticles/Springer/" + doi + ".xml";
+	        String filePath = outputFolder + "DownloadedArticles/Springer/" + doi + ".xml";
 	        File f = new File(filePath);
 	        if(f.exists() && !f.isDirectory()) { 
 	            return;

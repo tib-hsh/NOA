@@ -11,11 +11,11 @@ import org.jsoup.Connection.Response;
 
 public class HindawiDownloader {
 
-	public static void downloadArticle(String doi) throws IOException {
+	public static void downloadArticle(String doi, String outputFolder) throws IOException {
 		
 		String url = "https://doi.org/" + doi;
 		if(!Updater.exists(url)) {
-			FileWriter writer = new FileWriter("NewArticleDOIs/NotDownloaded.txt", true);
+			FileWriter writer = new FileWriter(outputFolder + "NewArticleDOIs/NotDownloaded.txt", true);
 			writer.write(doi + System.lineSeparator());
 			writer.close();
 			return;
@@ -25,7 +25,7 @@ public class HindawiDownloader {
 		String articleURL = response.url().toString();
 		articleURL = "http://downloads" + articleURL.substring(11, articleURL.length()-1) + ".xml";
 		if(!Updater.exists(articleURL)) {
-			FileWriter writer = new FileWriter("NewArticleDOIs/NotDownloaded.txt", true);
+			FileWriter writer = new FileWriter(outputFolder + "NewArticleDOIs/NotDownloaded.txt", true);
 			writer.write(doi + System.lineSeparator());
 			writer.close();
 			return;
@@ -36,7 +36,7 @@ public class HindawiDownloader {
 	        ReadableByteChannel rbc = Channels.newChannel(website.openStream());
 	        doi = doi.replaceAll("/", "_");
 	        
-	        String filePath = "DownloadedArticles/Hindawi/" + doi + ".xml";
+	        String filePath = outputFolder + "DownloadedArticles/Hindawi/" + doi + ".xml";
 	        File f = new File(filePath);
 	        if(f.exists() && !f.isDirectory()) { 
 	            return;

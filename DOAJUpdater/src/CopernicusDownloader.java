@@ -12,11 +12,11 @@ import org.jsoup.Connection.Response;
 
 public class CopernicusDownloader {
 
-	public static void downloadArticle(String doi) throws IOException {
+	public static void downloadArticle(String doi, String outputFolder) throws IOException {
 		
 		String url = "https://doi.org/" + doi;
 		if(!Updater.exists(url)) {
-			FileWriter writer = new FileWriter("NewArticleDOIs/NotDownloaded.txt", true);
+			FileWriter writer = new FileWriter(outputFolder + "NewArticleDOIs/NotDownloaded.txt", true);
 			writer.write(doi + System.lineSeparator());
 			writer.close();
 			return;
@@ -26,7 +26,7 @@ public class CopernicusDownloader {
 		String articleURL = response.url().toString();
 		articleURL = articleURL + doi.substring(8) + ".xml";
 		if(!Updater.exists(articleURL)) {
-			FileWriter writer = new FileWriter("NewArticleDOIs/NotDownloaded.txt");
+			FileWriter writer = new FileWriter(outputFolder + "NewArticleDOIs/NotDownloaded.txt");
 			writer.write(doi + System.lineSeparator());
 			writer.close();
 			return;
@@ -36,7 +36,7 @@ public class CopernicusDownloader {
 	        URL website = new URL(articleURL);
 	        ReadableByteChannel rbc = Channels.newChannel(website.openStream());
 	        doi = doi.replaceAll("/", "_");
-	        String filePath = "DownloadedArticles/Copernicus/" + doi + ".xml";
+	        String filePath = outputFolder + "DownloadedArticles/Copernicus/" + doi + ".xml";
 	        File f = new File(filePath);
 	        if(f.exists() && !f.isDirectory()) { 
 	            return;

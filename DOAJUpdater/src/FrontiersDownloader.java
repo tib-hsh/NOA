@@ -19,13 +19,13 @@ import org.jsoup.select.Elements;
 
 public class FrontiersDownloader {
 	
-	public static void downloadArticle(String doi) throws IOException {
+	public static void downloadArticle(String doi, String outputFolder) throws IOException {
 		
 		String articleURL = "https://www.frontiersin.org/articles/" + doi;
 		String downloadURL = "https://www.frontiersin.org/articles/" + doi + "/xml/nlm";
 		
 		if(!Updater.exists(downloadURL)) {
-			FileWriter writer = new FileWriter("NewArticleDOIs/NotDownloaded.txt", true);
+			FileWriter writer = new FileWriter(outputFolder + "NewArticleDOIs/NotDownloaded.txt", true);
 			writer.write(doi + System.lineSeparator());
 			writer.close();
 			return;
@@ -35,7 +35,7 @@ public class FrontiersDownloader {
 	        URL website = new URL(downloadURL);
 	        ReadableByteChannel rbc = Channels.newChannel(website.openStream());
 	        doi = doi.replaceAll("/", "_");
-			String folderPath = "DownloadedArticles/Frontiers/" + doi + "/";
+			String folderPath = outputFolder + "DownloadedArticles/Frontiers/" + doi + "/";
 	        File f = new File(folderPath);
 	        if(f.exists()) { 
 	            return;

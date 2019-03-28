@@ -28,8 +28,8 @@ import com.mongodb.client.MongoDatabase;
 
 public class PMCDownloader {
 
-	public static void downloadArticles(String fromDate, String untilDate) throws IOException {
-		new File("DownloadedArticles/PMC").mkdirs();
+	public static void downloadArticles(String fromDate, String untilDate, String outputFolder) throws IOException {
+		new File(outputFolder + "DownloadedArticles/PMC").mkdirs();
 
 		// Get all articles published on PMC in specified timeframe
 		String xmlResponse = IOUtils
@@ -58,7 +58,7 @@ public class PMCDownloader {
 		pmcIDs.replaceAll(s -> s.replaceFirst("<\\/identifier>", ""));
 
 		FileWriter writer;
-		writer = new FileWriter("NewArticleDOIs/PMC.txt");
+		writer = new FileWriter(outputFolder + "NewArticleDOIs/PMC.txt");
 		for (String str : pmcIDs) {
 			writer.write(str + System.lineSeparator());
 		}
@@ -76,7 +76,7 @@ public class PMCDownloader {
 		for (String pmcID : pmcIDs) {
 			i++;
 			System.out.println("Downloading Article " + i + "/" + pmcIDs.size());
-			String filePath = "DownloadedArticles/PMC/PMC" + pmcID.replaceAll("oai:pubmedcentral\\.nih\\.gov:", "")
+			String filePath = outputFolder + "DownloadedArticles/PMC/PMC" + pmcID.replaceAll("oai:pubmedcentral\\.nih\\.gov:", "")
 					+ ".xml";
 			File f = new File(filePath);
 			if (f.exists() && !f.isDirectory()) {
@@ -101,7 +101,7 @@ public class PMCDownloader {
 			String downloadURL = "https://www.ncbi.nlm.nih.gov/pmc/oai/oai.cgi?verb=GetRecord&identifier=" + pmcID
 					+ "&metadataPrefix=pmc";
 			if (!Updater.exists(downloadURL)) {
-				writer = new FileWriter("NewArticleDOIs/NotDownloaded.txt", true);
+				writer = new FileWriter(outputFolder + "NewArticleDOIs/NotDownloaded.txt", true);
 				writer.write(pmcID + System.lineSeparator());
 				writer.close();
 				return;
