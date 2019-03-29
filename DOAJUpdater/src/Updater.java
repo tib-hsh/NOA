@@ -1,6 +1,4 @@
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -12,9 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.bson.Document;
 import org.json.*;
@@ -53,10 +49,6 @@ public class Updater {
 		if (downloadPMC) {
 			PMCDownloader.downloadArticles(fromDate, untilDate, outputFolder);
 		} else {
-			Properties properties = new Properties();
-			BufferedInputStream stream = new BufferedInputStream(new FileInputStream("DOAJUpdater.properties"));
-			properties.load(stream);
-			stream.close();
 			MongoClient mongoClient = new MongoClient(new MongoClientURI(mongoURI));
 			MongoDatabase database = mongoClient.getDatabase(mongoDB);
 			collection = database.getCollection("mongoCollection");
