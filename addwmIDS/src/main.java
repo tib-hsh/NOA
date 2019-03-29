@@ -20,40 +20,90 @@ public class main {
         stream.close();
         MongoClient mongoClient = new MongoClient(new MongoClientURI(properties.getProperty("mongoURI")));
         DB database = mongoClient.getDB(properties.getProperty("dbName"));
-        extractCats(database);
-        newDB(database);
         addCatsToDB(database);
     }
-
     private static void addCatsToDB(DB database) {
-        DBCollection collection = database.getCollection(properties.getProperty("dbName"));
+
+        //database information
+        DBCollection collection = database.getCollection(properties.getProperty("imageCollection"));
         DBCollection identifiers = database.getCollection("WMIdentifiers");
         BasicDBObject query = new BasicDBObject("wmcat", new BasicDBObject("$exists", false));
         DBCursor cursor = collection.find(query);
         cursor.addOption(Bytes.QUERYOPTION_NOTIMEOUT);
+
+        //loop through all images
         while(cursor.hasNext()){
             try {
                 DBObject image = cursor.next();
                 BasicDBList cats = (BasicDBList) image.get("wpcats");
                 List<String> wmidentifiers = new ArrayList<>();
+
+                //loop through all Wikipedia categories of an image
                 for (Object cat: cats
-                     ) {
+                        ) {
                     String wpcat = (String)cat;
+
+                    //search WMIdentifiers database for the category
                     BasicDBObject catquery = new BasicDBObject("wpcat", wpcat);
                     DBObject oldIdentifiers = identifiers.find(catquery).one();
-                    BasicDBObject newIdentifiers = new BasicDBObject();
 
-                    // the next three lines add all three identifiers instead of only the commons category
+                    //if the category doesn't exist, add it + corresponding Wikidata and Wikimedia Commons information
+                    if(oldIdentifiers==null){
+                        BasicDBObject object = new BasicDBObject();
+                        object.put("wpcat", wpcat);
+                        String wditem = null;
+                        String wmcat = null;
 
-                    /*newIdentifiers.put("wpcat", oldIdentifiers.get("wpcat"));
+                        //call to Wikidata API
+                        try {
+                            URL apiURL = new URL("https://www.wikidata.org/w/api.php?action=wbgetentities&sites=enwiki&format=json&props=sitelinks&sitefilter=commonswiki&titles=Category%3A" + wpcat.replaceAll(" ", "_"));
+                            BufferedReader in = new BufferedReader(new InputStreamReader(apiURL.openStream()));
+                            String inputLine;
+                            String json = "";
+                            while ((inputLine = in.readLine()) != null) {
+                                json += inputLine;
+                            }
+
+                            //parse API response
+                            BasicDBObject wm = BasicDBObject.parse(json);
+                            BasicDBObject entities = (BasicDBObject)wm.get("entities");
+                            Set<String> keySet = entities.keySet();
+                            wditem = keySet.iterator().next();
+                            DBObject item = (DBObject) entities.get(wditem);
+                            BasicDBObject sitelinks = (BasicDBObject)item.get("sitelinks");
+                            BasicDBObject commonswiki = (BasicDBObject)sitelinks.get("commonswiki");
+                            wmcat = (String)commonswiki.get("title");
+                            wmcat = wmcat.replaceAll("Category:", "");
+
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+
+                        //insert new information into WMIdentifiers database
+                        object.put("wmcat", wmcat);
+                        object.put("wditem", wditem);
+                        identifiers.insert(object);
+
+                        //continue with the new object
+                        oldIdentifiers = object;
+                    }
+
+
+                    // the next four lines add all three identifiers instead of only the commons category
+
+                    /*BasicDBObject newIdentifiers = new BasicDBObject();
+                    newIdentifiers.put("wpcat", oldIdentifiers.get("wpcat"));
                     newIdentifiers.put("wmcat", oldIdentifiers.get("wmcat"));
                     newIdentifiers.put("wditem", oldIdentifiers.get("wditem"));*/
 
+                    //only Wikimedia Commons category is added to the database for now
                     String wmcat = (String) oldIdentifiers.get("wmcat");
                     if(wmcat !=null) {
                         wmidentifiers.add(wmcat);
                     }
                 }
+
+                //insert list of Wikimedia Commons categories; update database
                 image.put("wmcat", wmidentifiers);
                 ObjectId id = (ObjectId) image.get("_id");
                 BasicDBObject idquery = new BasicDBObject("_id", id);
@@ -63,73 +113,5 @@ public class main {
                 e.printStackTrace();
             }
         }
-    }
-
-    private static void newDB(DB db) throws IOException {
-        File file = new File("UniqueCatstemp.txt");
-        DBCollection collection = db.getCollection("WMIdentifiers");
-        BufferedReader br = new BufferedReader(new FileReader(file));
-        String line;
-        while((line=br.readLine())!=null){
-            BasicDBObject object = new BasicDBObject();
-            object.put("wpcat", line);
-            String wditem = null;
-            String wmcat = null;
-            try {
-                URL apiURL = new URL("https://www.wikidata.org/w/api.php?action=wbgetentities&sites=enwiki&format=json&props=sitelinks&sitefilter=commonswiki&titles=Category%3A" + line.replaceAll(" ", "_"));
-                BufferedReader in = new BufferedReader(new InputStreamReader(apiURL.openStream()));
-                String inputLine;
-                String json = "";
-                while ((inputLine = in.readLine()) != null) {
-                    json += inputLine;
-                }
-                BasicDBObject wm = BasicDBObject.parse(json);
-                BasicDBObject entities = (BasicDBObject)wm.get("entities");
-                Set<String> keySet = entities.keySet();
-                wditem = keySet.iterator().next();
-                DBObject item = (DBObject) entities.get(wditem);
-                BasicDBObject sitelinks = (BasicDBObject)item.get("sitelinks");
-                BasicDBObject commonswiki = (BasicDBObject)sitelinks.get("commonswiki");
-                wmcat = (String)commonswiki.get("title");
-                wmcat = wmcat.replaceAll("Category:", "");
-                System.out.println("WPCat: " + line);
-                System.out.println("WDItem: "+ wditem);
-                System.out.println("WMCat: " + wmcat);
-
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-            object.put("wmcat", wmcat);
-            object.put("wditem", wditem);
-            collection.insert(object);
-        }
-        collection.createIndex(new BasicDBObject("wpcat", 1));
-    }
-
-
-    public static void extractCats (DB database) throws IOException {
-        DBCollection collection = database.getCollection(properties.getProperty("dbName"));
-        DBCursor cursor = collection.find();
-        List<String> list = new ArrayList<>();
-        while(cursor.hasNext()) {
-            BasicDBObject image = (BasicDBObject) cursor.next();
-            try {
-                BasicDBList terms = (BasicDBList) image.get("wpcats");
-                for (Object term : terms) {
-                    if(!list.contains(String.valueOf(term))){
-                        list.add(String.valueOf(term));
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        File termfile = new File("UniqueCats.txt");
-        BufferedWriter bw = new BufferedWriter(new FileWriter(termfile));
-        System.out.println(list.size());
-        for (String s: list){
-            bw.write(s + "\n");
-        }
-        bw.close();
     }
 }
