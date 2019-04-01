@@ -63,6 +63,8 @@ public class MongoDBRepo
 		db.getCollection("Errors_" + date).insertOne(d);
 	}
 
+
+	//creates the database entry for the article
 	public void writeJournal(ResultSetJournal rsj, boolean withDownload)
 	{
 		Document d = new Document("journalName", rsj.getJournalName());
@@ -72,11 +74,6 @@ public class MongoDBRepo
 		List<Document> findings = new ArrayList<>();
 		List<Object> findingsRef = new ArrayList<>();
 		List<Document> Bibliography = new ArrayList<>();
-		List<Document> IDList = new ArrayList<>();
-
-		for (ID ID : rsj.getIDs()) {
-			IDList.add(new Document("type", ID.getType()).append("number", ID.getNumber()));
-		}
 
 		for (Citation c : rsj.getBibliography()) {
 			List<Document> BibAuthors = new ArrayList<>();
@@ -260,7 +257,6 @@ public class MongoDBRepo
 		d.append("publisher", rsj.getPublisher());
 		d.append("keywords", rsj.getKeywords());
 		d.append("Bibliography", Bibliography);     //TODO Wichtig?
-		d.append("IDList", IDList);                     //TODO Wichtig?
 		d.append("PublicationDate", pdate);                //TODO aufsplitten
 		d.append("formula", rsj.hasFormula);               //TODO Wichtig?
 		d.append("source", rsj.getSource());

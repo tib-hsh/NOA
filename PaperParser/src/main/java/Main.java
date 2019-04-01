@@ -47,7 +47,7 @@ public class Main
 	public static int articles = 0;
 	public static long numberOfDocs = -1;
 	public static long currentDoc = 0;
-	static String location = "Fill in the Paper Location here"
+	static String location = "Fill in the Paper Location here";
 	static String outputEncoding = "UTF-8";
 	static int VERBOSE = 1;
 	static String mongoIP = "IP for mongoDB Server";
@@ -500,32 +500,13 @@ public class Main
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Node currentNode = nodeList.item(i);
 			if (currentNode.getNodeName().equals("article-id")) {
-				ID id = new ID();
+				//ID id = new ID();
 				try {
 					if (currentNode.getAttributes().item(0).getNodeValue().equals("doi")) {
 						try {
 							rsj.setJournalDOI(currentNode.getTextContent().trim());
-							id.setNumber(currentNode.getTextContent().trim());
-							id.setType("doi");
-							rsj.getIDs().add(id);
 						} catch (Exception e) {
 							rsj.setJournalDOI("NO DOI FOUND");
-						}
-					} else if (currentNode.getAttributes().item(0).getNodeValue().equals("pmc")) {
-						try {
-							id.setNumber(currentNode.getTextContent().trim());
-							id.setType("pmc");
-							rsj.getIDs().add(id);
-						} catch (Exception e) {
-							rsj.setJournalDOI("NO pmcid FOUND");
-						}
-					} else if (currentNode.getAttributes().item(0).getNodeValue().equals("pmid")) {
-						try {
-							id.setNumber(currentNode.getTextContent().trim());
-							id.setType("pmid");
-							rsj.getIDs().add(id);
-						} catch (Exception e) {
-							rsj.setJournalDOI("NO pmid FOUND");
 						}
 					}
 					if (currentNode.getAttributes().item(0).getNodeValue().equals("publisher-id")) {

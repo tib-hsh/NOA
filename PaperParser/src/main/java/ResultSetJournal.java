@@ -40,7 +40,6 @@ public class ResultSetJournal
 	boolean hasFormula;
 	String Error="";
 	List <Citation> Bibliography = new ArrayList<>();
-	List<ID> IDs = new ArrayList<>();
 	List<Result> resultList = new ArrayList<>();
 	PublicationDate fullDate;
 	String source;
