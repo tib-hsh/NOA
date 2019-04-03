@@ -204,9 +204,7 @@ public class MongoDBRepo
 				String newDoi = rsj.getJournalDOI().substring(0, 7) + "%2F" + rsj.getJournalDOI().substring(8);
 				s = "https://static-content.springer.com/image/art%3A" + newDoi + "/" + a.getGraphicDOI();
 			} else if (rsj.getPublisher().matches(".*[fF]rontiers.*")) {
-				if (rsj.getFile().getParent() != null) {
-					s = rsj.getFile().getParent() + "\\" + a.getGraphicDOI();
-				}
+				s = a.getGraphicDOI();
 			} else if (rsj.getXMLPathComplete().matches(".*[cC]opernicus.*")) {
 				s = a.getGraphicDOI();
 			}
