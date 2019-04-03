@@ -30,6 +30,8 @@ public class Result
 	java.util.List<String> context = new ArrayList<>();
 	String figID;
 	String figGroupID;
+	Boolean copyrightFlag;
+
 
 	public void Restul(ResultSetJournal rsj)
 	{

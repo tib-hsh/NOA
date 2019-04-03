@@ -9,6 +9,11 @@ import metadata.Citation;
 import metadata.ID;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -64,17 +69,16 @@ public class MongoDBRepo
 	}
 
 
-	//creates the database entry for the article
 	public void writeJournal(ResultSetJournal rsj, boolean withDownload)
 	{
 		Document d = new Document("journalName", rsj.getJournalName());
 		d.put("_id", new ObjectId());
 		d.append("DOI", rsj.getJournalDOI());
-		List<Document> Authors = new ArrayList<>();
+
 		List<Document> findings = new ArrayList<>();
 		List<Object> findingsRef = new ArrayList<>();
-		List<Document> Bibliography = new ArrayList<>();
 
+		List<Document> Bibliography = new ArrayList<>();
 		for (Citation c : rsj.getBibliography()) {
 			List<Document> BibAuthors = new ArrayList<>();
 
@@ -87,6 +91,8 @@ public class MongoDBRepo
 			}
 			Bibliography.add(new Document("Authors", BibAuthors).append("title", c.getTitle()).append("year", c.getYear()).append("journal", c.getJournal()).append("IDs", IDs).append("Text", c.getText()));
 		}
+
+        List<Document> Authors = new ArrayList<>();
 		for (Author a : rsj.getAuthors()) {
 			Authors.add(new Document("firstName", a.getFirstName()).append("lastName", a.getLastName()));
 		}
@@ -221,18 +227,48 @@ public class MongoDBRepo
 			if (a.getCaptionBody() != null)
 				lengthOfBody = a.getCaptionBody().length();
 
+			//find out if images are originally from a different source; produces a lot of false positives
+            boolean copyrightFlag = false;
+            String caption = a.getCaptionBody();
+            if (caption != null) {
+                Matcher matcher = Pattern.compile("\\((19|20)\\d\\d").matcher(caption);
+                Matcher matcher1 = Pattern.compile("(19|20)\\d\\d\\)").matcher(caption);
+                if (matcher.find()) {
+                    copyrightFlag = true;
+                } else if (matcher1.find()) {
+                    copyrightFlag = true;
 
+                    try {
+                        BufferedReader br = new BufferedReader(new FileReader("checklines.txt"));
+                        String line;
+                        while ((line = br.readLine()) != null) {
+                            if (caption.contains(line)) {
+                                copyrightFlag = true;
+                                break;
+                            }
+                        }
+                        br.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                a.setCopyrightFlag(copyrightFlag);
+
+                //insert TIB_URL
+
+            }
 			//Here are the Items of the Image Collection definied.
-			//Later added: discipline, wpterms, wpcats, acronym, imageType filled, CopyrightFlag, TIB_URL
+			//Later added: discipline, wpterms, wpcats, acronym, imageType filled, TIB_URL
 			findings.add(img.append("findingID", a.getFindingID())
 					.append("DOI", rsj.getJournalDOI())
-					.append("source_id", d.get("_id"))
+					.append("sourceID", d.get("_id"))
 					.append("title", rsj.getTitle())
 					.append("journalName", rsj.getJournalName())
 					.append("captionTitle", a.getLabel())
 					.append("captionBody", a.getCaptionBody())
 					.append("captionTitleLength", lengthOfTitle)
-					.append("captionBodyLenght", lengthOfBody)
+					.append("captionBodyLength", lengthOfBody)
 					.append("URL", s) //Note: New begin
 					.append("licenseType", licenseType)
 					.append("authors", Authors)
@@ -241,7 +277,8 @@ public class MongoDBRepo
 					.append("pubMonth", pdate.get("month"))
 					.append("pubDay", pdate.get("day"))
 					.append("publisher", rsj.getPublisher())
-					.append("context", a.getContext()));
+					.append("context", a.getContext())
+                    .append("copyrightFlag", a.getCopyrightFlag()));
 		}
 
 
@@ -253,24 +290,24 @@ public class MongoDBRepo
 		d.append("journalIssue", rsj.getIssue());
 		d.append("pages", rsj.getPages());
 		d.append("license", rsj.getLicense());
-		d.append("LicenseType", licenseType);
+		d.append("licenseType", licenseType);
 		d.append("publisher", rsj.getPublisher());
 		d.append("keywords", rsj.getKeywords());
-		d.append("Bibliography", Bibliography);     //TODO Wichtig?
-		d.append("PublicationDate", pdate);                //TODO aufsplitten
+		d.append("bibliography", Bibliography);     //TODO Wichtig?
+		d.append("publicationDate", pdate);                //TODO aufsplitten
 		d.append("formula", rsj.hasFormula);               //TODO Wichtig?
 		d.append("source", rsj.getSource());
 
 		if (rsj.getAbstract() != null)
-			d.append("abstractLenght", rsj.getAbstract().length());
+			d.append("abstractLength", rsj.getAbstract().length());
 		else
-			d.append("abstractLenght", "Abstract is NULL");
+			d.append("abstractLength", "Abstract is NULL");
 
 		d.append("body", rsj.getBody());
 		if (rsj.getBody() != null)
-			d.append("bodyLenght", rsj.getBody().length());
+			d.append("bodyLength", rsj.getBody().length());
 		else
-			d.append("bodyLenght", "Body is NULL");
+			d.append("bodyLength", "Body is NULL");
 
 		//d.append("findings",findings);
 
