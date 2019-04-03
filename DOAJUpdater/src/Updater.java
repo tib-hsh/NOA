@@ -88,7 +88,6 @@ public class Updater {
 				cursor = tokenArray.getInt("cursor");
 				getDOIs(listRecords);
 				System.out.println(cursor + "/" + listSize);
-				break;
 			}
 
 			mongoClient.close();
