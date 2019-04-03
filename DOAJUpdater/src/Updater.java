@@ -2,10 +2,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +36,7 @@ public class Updater {
 	static boolean downloadPMC;
 
 	public static void main(String[] args)
-			throws JSONException, MalformedURLException, IOException, ParseException, InterruptedException {
+			throws IOException {
 
 		// Dates in Format yyyy-MM-dd
 		fromDate = java.time.LocalDate.now().toString();
@@ -73,6 +71,8 @@ public class Updater {
 			int listSize = tokenArray.getInt("completeListSize");
 			getDOIs(listRecords);
 
+			System.out.println("Searching for new articles...");
+			
 			// while not at the end of the list fetch next page
 			while (cursor < listSize) {
 				xmlResponse = IOUtils.toString(
@@ -88,6 +88,7 @@ public class Updater {
 				cursor = tokenArray.getInt("cursor");
 				getDOIs(listRecords);
 				System.out.println(cursor + "/" + listSize);
+				break;
 			}
 
 			mongoClient.close();
@@ -163,7 +164,7 @@ public class Updater {
 		}
 	}
 
-	// adds DOIs from Hindawi, Frontiers, Copernicus and Springer to newArticles.
+	// adds DOIs from Hindawi, Frontiers, Copernicus and Springer to newArticles
 	// DOIs that are already in MongoDB are skipped
 	public static void getDOIs(JSONObject listRecords) {
 		JSONArray records = listRecords.getJSONArray("record");

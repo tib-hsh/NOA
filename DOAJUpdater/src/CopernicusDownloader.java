@@ -14,6 +14,8 @@ public class CopernicusDownloader {
 
 	public static void downloadArticle(String doi, String outputFolder) throws IOException {
 		
+		System.out.println(doi);
+		
 		String url = "https://doi.org/" + doi;
 		if(!Updater.exists(url)) {
 			FileWriter writer = new FileWriter(outputFolder + "NewArticleDOIs/NotDownloaded.txt", true);
