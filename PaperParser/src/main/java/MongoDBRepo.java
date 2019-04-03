@@ -234,8 +234,8 @@ public class MongoDBRepo
                 if (matcher.find()) {
                     copyrightFlag = true;
                 } else if (matcher1.find()) {
-                    copyrightFlag = true;
-
+					copyrightFlag = true;
+				}
                     try {
                         BufferedReader br = new BufferedReader(new FileReader("checklines.txt"));
                         String line;
@@ -255,7 +255,7 @@ public class MongoDBRepo
 
                 //insert TIB_URL
 
-            }
+
 			//Here are the Items of the Image Collection definied.
 			//Later added: discipline, wpterms, wpcats, acronym, imageType filled, TIB_URL
 			findings.add(img.append("findingID", a.getFindingID())
