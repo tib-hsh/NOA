@@ -43,5 +43,4 @@ public class ResultSetJournal
 	List<Result> resultList = new ArrayList<>();
 	PublicationDate fullDate;
 	String source;
-
 }
