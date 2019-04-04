@@ -1,4 +1,5 @@
-﻿et al
+﻿Lantmäteriet
+et al
 ©
 rovided by
 ermission
@@ -15,7 +16,6 @@ dapted
 aken from
 http
 .com
-Lantmäteriet
 ARVO
 OpenStreetMap
 Corbis
