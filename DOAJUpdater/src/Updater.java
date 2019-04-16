@@ -49,7 +49,7 @@ public class Updater {
 		} else {
 			MongoClient mongoClient = new MongoClient(new MongoClientURI(mongoURI));
 			MongoDatabase database = mongoClient.getDatabase(mongoDB);
-			collection = database.getCollection("mongoCollection");
+			collection = database.getCollection(mongoCollection);
 
 			new File(outputFolder + "DownloadedArticles/Copernicus").mkdirs();
 			new File(outputFolder + "DownloadedArticles/Hindawi").mkdirs();
@@ -128,10 +128,8 @@ public class Updater {
 	}
 
 	private static void readArgs(String[] args) {
-		if (args.length % 2 != 0)// ||args.length==0)
+		if (args.length % 2 != 0)
 			throw new IllegalArgumentException("Wrong number of Arguments");
-		if (args.length == 0)
-			System.out.println("DEBUG MODE ACTIVE");
 
 		for (int i = 0; i < args.length; i += 2) {
 			if (!args[i].contains("-") || args[i].length() < 2)
@@ -145,7 +143,7 @@ public class Updater {
 		if (arguments.containsKey("mongoDB"))
 			mongoDB = arguments.get("mongoDB");
 		if (arguments.containsKey("mongoCollection"))
-			mongoDB = arguments.get("mongoCollection");
+			mongoCollection = arguments.get("mongoCollection");
 		if (arguments.containsKey("fromDate"))
 			fromDate = arguments.get("fromDate");
 		if (arguments.containsKey("mongoImageCollection"))
