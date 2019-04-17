@@ -16,7 +16,7 @@ The code represents the full pipeline of the project which is as following:
 
 **Note:** This repository is a work in progress. The code is not complete yet and there may still be errors. More code and changes will be added as the project evolves.
 
-## Add Wikimedia Categories
+## addWMIDS
 This programs finds all distinct Wikipedia Categories in a MongoDB, writes them into a new database and adds the corresponding categories from Wikimedia Commons as well as Wikidata items. It then adds the Wikimedia Commons categories to the original database. The created database can be deleted. The wikidata items are not added to the original database. This can be done with small changes to the source code.
 
 ## DOAJUpdater
@@ -58,9 +58,6 @@ This is the interface for the search engine currently at noa.wp.hs-hannover.de. 
 
 ## Wikipedia Categories
 Adds categories from Wikipedia to images.
-
-## addWMIDs
-Adds the corresponding items from Wikidata and categories from Wikimedia Commons to the Wikipedia Categories.
 
 ## addDiscipline
 Adds disciplines to articles using the categorization from https://rzblx1.uni-regensburg.de/ezeit/.
