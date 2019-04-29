@@ -276,7 +276,7 @@ public class MongoDBRepo
 					.append("pubDay", pdate.get("day"))
 					.append("publisher", rsj.getPublisher())
 					.append("context", a.getContext())
-                    .append("copyrightFlag", a.getCopyrightFlag()));
+                    .append("copyrightFlag", a.isCopyrightFlag()));
 		}
 
 
