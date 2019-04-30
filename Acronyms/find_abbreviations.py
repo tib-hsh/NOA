@@ -121,7 +121,7 @@ def find_acronym():
         paper_body = paper['body']
         paper_id = paper['_id']
         
-        images = db_images.find({ "source_id": paper_id })
+        images = db_images.find({ "sourceID": paper_id })
         
         if images.count() < 1:
             continue

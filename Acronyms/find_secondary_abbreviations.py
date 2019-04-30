@@ -55,7 +55,7 @@ def get_journalname(paper_id):
     
 
 for img in has_abbreviation:
-    journal_name = get_journalname(img['source_id']) 
+    journal_name = get_journalname(img['sourceID']) 
     journalabbr = dict_of_journals.get(journal_name,{})   
     if 'acronym' in img:
         for abbreviation in img['acronym']:
