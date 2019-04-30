@@ -87,7 +87,7 @@ for img in has_abbreviation:
             acro = abbreviation[0]
             definition = abbreviation[1]
             if definition == None:
-                journal_name = get_journalname(img['source_id'])
+                journal_name = get_journalname(img['sourceID'])
                 if  acro in dict_of_journals[journal_name]:
                     journaldef = dict_of_journals[journal_name][acro]
                     if len(journaldef) == 1:
