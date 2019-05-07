@@ -4,28 +4,49 @@ import org.bson.types.ObjectId;
 import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
 /**
  * Created by SohmenL on 07.11.2018.
  */
-public class main {
-    static Properties properties = new Properties();
+public class Main {
+	private static Map<String, String> arguments = new HashMap<String, String>();
+	static String mongoURI;
+	static String mongoDB;
+	static String mongoCollection;
 
     public static void main (String[] args) throws IOException {
-        BufferedInputStream stream = new BufferedInputStream(new FileInputStream("wmIDs.properties"));
-        properties.load(stream);
-        stream.close();
-        MongoClient mongoClient = new MongoClient(new MongoClientURI(properties.getProperty("mongoURI")));
-        DB database = mongoClient.getDB(properties.getProperty("dbName"));
+    	readArgs(args);
+        MongoClient mongoClient = new MongoClient(new MongoClientURI(mongoURI));
+        DB database = mongoClient.getDB(mongoDB);
         addCatsToDB(database);
     }
+    
+	private static void readArgs(String[] args) {
+		if (args.length % 2 != 0)
+			throw new IllegalArgumentException("Wrong number of Arguments");
+
+		for (int i = 0; i < args.length; i += 2) {
+			if (!args[i].contains("-") || args[i].length() < 2)
+				throw new IllegalArgumentException("Error with ParamList");
+			arguments.put(args[i].substring(1, args[i].length()), args[i + 1]);
+		}
+		if (arguments.containsKey("mongoURI"))
+			mongoURI = arguments.get("mongoURI");
+		if (arguments.containsKey("mongoDB"))
+			mongoDB = arguments.get("mongoDB");
+		if (arguments.containsKey("mongoCollection"))
+			mongoCollection = arguments.get("mongoCollection");
+	}
+    
     private static void addCatsToDB(DB database) {
 
         //database information
-        DBCollection collection = database.getCollection(properties.getProperty("imageCollection"));
+        DBCollection collection = database.getCollection(mongoCollection);
         DBCollection identifiers = database.getCollection("WMIdentifiers");
         BasicDBObject query = new BasicDBObject("wmcat", new BasicDBObject("$exists", false));
         DBCursor cursor = collection.find(query);
@@ -39,8 +60,7 @@ public class main {
                 List<String> wmidentifiers = new ArrayList<>();
 
                 //loop through all Wikipedia categories of an image
-                for (Object cat: cats
-                        ) {
+                for (Object cat: cats) {
                     String wpcat = (String)cat;
 
                     //search WMIdentifiers database for the category
