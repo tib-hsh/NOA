@@ -203,13 +203,13 @@ function doApiQuery($post, &$ch = null, $mode) {
     curl_setopt($ch, CURLOPT_HEADER, 0);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     $data = curl_exec($ch);
-    if (!$data) {
+    if (!$data  && $mode != 'userinfo') {
         header("HTTP/1.1 $errorCode Internal Server Error");
         echo 'Curl error: ' . htmlspecialchars(curl_error($ch));
         exit(0);
     }
     $ret = json_decode($data);
-    if ($ret === null) {
+    if ($ret === null  && $mode != 'userinfo') {
         header("HTTP/1.1 $errorCode Internal Server Error");
         echo 'Unparsable API response: <pre>' . htmlspecialchars($data) . '</pre>';
         exit(0);

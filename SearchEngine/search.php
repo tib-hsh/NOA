@@ -7,7 +7,7 @@ $res = doApiQuery(array(
     'format' => 'json',
     'action' => 'query',
     'meta' => 'userinfo',
-        ), $ch, "");
+        ), $ch, 'userinfo');
 
 //Check if OAuth user is connected
 $wikiUsername = NULL;
