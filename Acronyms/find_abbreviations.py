@@ -6,7 +6,20 @@ from nltk.stem import WordNetLemmatizer
 from nltk import word_tokenize, pos_tag
 from pymongo import MongoClient
 
+params={}
 
+if __name__ == "__main__":
+    sizeOfArgs = len(sys.argv)
+    sizeOfArgs-=1
+    if sizeOfArgs == 0 or sizeOfArgs%2!=0:
+        raise Exception('Wrong number of arguments')
+    for e in range((int)(sizeOfArgs/2)):
+        key=sys.argv[e*2+1]
+        val=sys.argv[e*2+2]
+        if "-" not in key or len(key)<2:
+            raise Exception('Error with Param #'+str(e))
+        params[key[1:]]=val
+    print("Got Params: ", params)
 
 #find sequence of words starting with the acronym letters
 def find_best_long_form1(long_form, short_form):
@@ -144,7 +157,7 @@ def find_acronym():
             acr_in_caption = []
             for token in tokenizer.tokenize(caption):
                 token = token.strip("-.,:;)()\"“”\'[]<>")
-                if token.isupper() and 2 < len(token) <= 5:                 
+                if token.isupper() and 2 < len(token) <= 5:               
                     acr_in_caption.append(token)
             acr_in_caption = list(set(acr_in_caption))
 
@@ -162,10 +175,10 @@ def find_acronym():
         
         
         
-client = MongoClient('mongodb://141.71.5.22:27017/')
-db = client.NewSchema
-db_images = db.AllImages
-db_articles = db.AllArticles
+client = MongoClient(params['mongoIP'], int(params['mongoPort']))
+db = client[params['mongoDB']]
+db_images = db[params['imageCollection']]
+db_articles = db[params['articleCollection']]
 articles = db_articles.find({})
 
 

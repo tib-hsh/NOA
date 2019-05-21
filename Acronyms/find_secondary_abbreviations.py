@@ -3,15 +3,27 @@ from nltk.tokenize import WhitespaceTokenizer
 from pymongo import MongoClient
 tokenizer = WhitespaceTokenizer()
 import json
+import sys
 
+params={}
 
-## Christian's server section
-client = MongoClient('mongodb://141.71.5.22:27017/')
-#db = client.migration
-#collection = db.Corpus2b
-db = client.NewSchema
-db_images = db.AllImages
-db_articles = db.AllArticles
+if __name__ == "__main__":
+    sizeOfArgs = len(sys.argv)
+    sizeOfArgs-=1
+    if sizeOfArgs == 0 or sizeOfArgs%2!=0:
+        raise Exception('Wrong number of arguments')
+    for e in range((int)(sizeOfArgs/2)):
+        key=sys.argv[e*2+1]
+        val=sys.argv[e*2+2]
+        if "-" not in key or len(key)<2:
+            raise Exception('Error with Param #'+str(e))
+        params[key[1:]]=val
+    print("Got Params: ", params)
+    
+client = MongoClient(params['mongoIP'], int(params['mongoPort']))
+db = client[params['mongoDB']]
+db_images = db[params['imageCollection']]
+db_articles = db[params['articleCollection']]
 
 total_time = time.time()
 start = time.time()
