@@ -81,9 +81,7 @@ def intersection(a,b):
 
 def most_specific(ts,n):
     #idfvals = [(t,idf.get(t,10) * concr.get(t,3.5)) for t in ts if idf.get(t,10) > 9.8]
-    print(ts[0], idf.get(ts[0], 10))
     idfvals = [(t, idf.get(t,1.0)) for t in ts if idf.get(t,1.0) > 0.2]
-    print(idfvals)
     idfsorted =  sorted(idfvals, key=lambda x: x[1], reverse=True)
     #print(idfsorted[:n])
     best = [t for t,idf in idfsorted[:n]]
@@ -157,7 +155,6 @@ def categories(terms,caption):
 
 records = collection.find({})
 processed = 0
-i = 0
 for f in records:
     processed += 1
     if processed % 1000 == 0:
@@ -171,8 +168,6 @@ for f in records:
 
     if wikiterms == None or len(wikiterms) == 0:
         continue
-    i += 1
-    print(i)
     wpcats = categories(wikiterms,caption)[:5]
 	
     print(f['DOI'],findingID)
