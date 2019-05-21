@@ -6,14 +6,20 @@ import pprint
 import math
 import numpy as np
 import nltk
+import argparse
 
-
-
+argpar = argparse.ArgumentParser()
+argpar.add_argument("-mongoIP", type=str, required=True)
+argpar.add_argument("-mongoPort", type=int, required=True)
+argpar.add_argument("-mongoDB", type=str, required=True)
+argpar.add_argument("-imageCollection", type=str, required=True)
+args = argpar.parse_args()
 
 
 w2vec = {}
 w2vdim = 0
 
+"""
 concr = {}
 with open("concreteness.csv") as fin:
     fin.readline()
@@ -23,9 +29,9 @@ with open("concreteness.csv") as fin:
         c = float(fields[2])
         if c > 0:
             concr[w] = c  
+"""
 
-
-with open("../../LangModels/w2v_noa.txt") as fin:
+with open("w2v_noa.txt") as fin:
     for line in fin:
         w,v = line.split('\t')
         v = np.array(list(map(float,v.split())))
@@ -48,10 +54,9 @@ with open("wikihypernym.json") as fin:
     hyper = json.loads(fin.read(),encoding="utf-8")    
     
 
-client = MongoClient('mongodb://141.71.5.22:27017/')
-db = client.NewSchema
-#collection = db.AllImages
-collection = db.Sandkasten2
+client = MongoClient(args.mongoIP, args.mongoPort)
+db = client[args.mongoDB]
+collection = db[args.imageCollection]
 
 def aggregated_vector(text):
     matches = 0
@@ -75,8 +80,10 @@ def intersection(a,b):
     return i
 
 def most_specific(ts,n):
-    idfvals = [(t,idf.get(t,10) * concr.get(t,3.5)) for t in ts if idf.get(t,10) > 9.8]
-    #idfvals = [(t, idf.get(t,10)) for t in ts if idf.get(t,10) > 9.8]
+    #idfvals = [(t,idf.get(t,10) * concr.get(t,3.5)) for t in ts if idf.get(t,10) > 9.8]
+    print(ts[0], idf.get(ts[0], 10))
+    idfvals = [(t, idf.get(t,1.0)) for t in ts if idf.get(t,1.0) > 0.2]
+    print(idfvals)
     idfsorted =  sorted(idfvals, key=lambda x: x[1], reverse=True)
     #print(idfsorted[:n])
     best = [t for t,idf in idfsorted[:n]]
@@ -150,6 +157,7 @@ def categories(terms,caption):
 
 records = collection.find({})
 processed = 0
+i = 0
 for f in records:
     processed += 1
     if processed % 1000 == 0:
@@ -163,18 +171,13 @@ for f in records:
 
     if wikiterms == None or len(wikiterms) == 0:
         continue
+    i += 1
+    print(i)
     wpcats = categories(wikiterms,caption)[:5]
-   
-    old = set(f['wpcats'])
-    
-    if old != set(wpcats):
-        print(f['originDOI'],findingID)
-        for wt in wpcats:
-            if wt not in old:
-                print('+',wt)
-        for wt in old:
-            if wt not in wpcats:
-                print('-',wt)
-   
-    collection.update({'_id': f['_id']},{'$unset': {'wpcats': 1 }}, multi=True)
+	
+    print(f['DOI'],findingID)
+    for wt in wpcats:
+        print('+',wt)
+
+    #collection.update({'_id': f['_id']},{'$unset': {'wpcats': 1 }}, multi=True)
     collection.update({'_id': f['_id']},{'$set':   {'wpcats': wpcats}}, upsert=False, multi=False)

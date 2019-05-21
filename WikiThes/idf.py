@@ -3,18 +3,22 @@ import collections
 import json
 import codecs
 import math
+import argparse
 
+argpar = argparse.ArgumentParser()
+argpar.add_argument("-mongoIP", type=str, required=True)
+argpar.add_argument("-mongoPort", type=int, required=True)
+argpar.add_argument("-mongoDB", type=str, required=True)
+argpar.add_argument("-imageCollection", type=str, required=True)
+args = argpar.parse_args()
 
 #dfs = {}
 dfs = collections.Counter()
 N = 0
 
-#client = MongoClient('mongodb://141.71.5.19:27017/')
-#db = client.beta
-#collection = db.Corpus_Sandkasten
-client = MongoClient('mongodb://141.71.5.22:27017/')
-db = client.NewSchema
-collection = db.AllImages
+client = MongoClient(args.mongoIP, args.mongoPort)
+db = client[args.mongoDB]
+collection = db[args.imageCollection]
 
 processed = 0
 records = collection.find({})

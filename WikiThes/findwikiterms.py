@@ -10,24 +10,18 @@ import re
 
 argpar = argparse.ArgumentParser(description='Find wikipedia terms and store them in Mongo.')
 argpar.add_argument('-verbose', action='store_true')
+argpar.add_argument("-mongoIP", type=str, required=True)
+argpar.add_argument("-mongoPort", type=int, required=True)
+argpar.add_argument("-mongoDB", type=str, required=True)
+argpar.add_argument("-imageCollection", type=str, required=True)
 args = argpar.parse_args()
 verbose = args.verbose
 
-
 vowel = re.compile(r'[aouei]')
 
-
-#client = MongoClient('mongodb://141.71.5.19:27017/')
-#db = client.beta
-#collection = db.Corpus_Playground
-
-client = MongoClient('mongodb://141.71.5.22:27017/')
-#db = client.migration
-#collection = db.Corpus2b
-#collection = db.Corpus_Sandkasten
-db = client.NewSchema
-collection = db.AllImages
-
+client = MongoClient(args.mongoIP, args.mongoPort)
+db = client[args.mongoDB]
+collection = db[args.imageCollection]
 
 swlist = stopwords.words('english')
 
@@ -125,7 +119,7 @@ wikiterms = readterms("wikicats.json")
 def lookup(p):
     if p in wikiterms:
         return p
-    else: 
+    else:
         words = p.split(' ')
         lemma = wn.morphy(words[-1],wn.NOUN)
         if lemma != None and lemma != words[-1]:
