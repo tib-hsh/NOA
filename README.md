@@ -82,6 +82,9 @@ This programs finds all distinct Wikipedia Categories in a MongoDB, writes them 
 ## addDiscipline
 Adds disciplines to articles using the categorization from https://rzblx1.uni-regensburg.de/ezeit/.
 
+## CreateSolrDB
+Creates new database collection with all fields needed by the search engine.
+
 ## Search Engine
 This is the interface for the search engine currently at noa.wp.hs-hannover.de. It includes two ways to upload images to Wikimedia Commons: 1. Using the random upload tool, which will show random images and let the user decide whether to upload or not. 2. Uploading images from the search results. Both function upload images under the user's own account.
 
