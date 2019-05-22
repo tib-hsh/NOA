@@ -1,17 +1,26 @@
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+import argparse
 
-current = 0
-client = MongoClient('ENTER MONGO IP', 'PORT')
-db = client['NewSchema']
-##### Read Collection
-article_collection = db['AllArticles']
-img_collection = db['AllImages']
+argpar = argparse.ArgumentParser()
+argpar.add_argument("-mongoIP", type=str, required=True)
+argpar.add_argument("-mongoPort", type=int, required=True)
+argpar.add_argument("-mongoDB", type=str, required=True)
+argpar.add_argument("-imageCollection", type=str, required=True)
+argpar.add_argument("-articleCollection", type=str, required=True)
+argpar.add_argument("-filename", type=str, required=True)
+args = argpar.parse_args()
+
+client = MongoClient(args.mongoIP, args.mongoPort)
+db = client[args.mongoDB]
+article_collection = db[args.articleCollection]
+img_collection = db[args.imageCollection]
+
 imagecount = 0
 i_skipped = 0
-######
-##########
+
 findings = article_collection.find({"numOfFindings": {"$gt": 0}}, no_cursor_timeout=True)
+
 for f in findings:
     journalName = str(f['journalName'])
     pathJournalName = str(f['journalName']).replace(' ', '_')
@@ -21,35 +30,20 @@ for f in findings:
     for j in f['findingsRef']:
         id = j
         image = img_collection.find_one({'_id': ObjectId(j)})
-        URL = image['URL2Image']
+        if image is None:
+            continue
+        URL = image['URL']
         findingID = image['findingID']
         path2file = f['path2file']
-        CAPTION = image['captionBody']
-        publisher = ""
-        publisher = str(f['publisher'])
-        if "Hindawi" in path2file:
-            publisher = "Hindawi"
-        elif "Springer" in path2file:
-            publisher = "Springer"
-        elif "PubMed" in path2file:
-            publisher = "PubMed"
-        elif "PMC" in path2file:
-            publisher = "PubMed"
-        elif "Copernicus" in publisher:
-            publisher = "Copernicus"
-        elif "frontiers" in path2file:
-            publisher = "Frontiers"
-        elif "Frontiers" in path2file:
-            publisher = "Frontiers"
+        publisher = str(f['source'])
         path = publisher + '/' + pathJournalName + '/' + year + '/' + Dumb_DOI + '/'
         root = "images/"
-        path2 = root + path
         imagecount += 1
-    with open("D:\Image_Files_URLS_betaCorpus_vtest1.txt", 'a', encoding="utf-8") as myfile:
-        print(path)
-        print(URL)
-        extension = URL.split('.')[-1]
-        myfile.write(URL + " " + root + path + str(findingID) + "." + extension + "\n")
+        with open(args.filename, 'a', encoding="utf-8") as myfile:
+            print(path)
+            print(URL)
+            extension = URL.split('.')[-1]
+            myfile.write(URL + " " + root + path + str(findingID) + "." + extension + "\n")
 print("end")
 print(imagecount)
 print("Image URLs found")
