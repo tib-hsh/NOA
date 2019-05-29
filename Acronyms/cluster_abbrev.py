@@ -14,7 +14,7 @@ image_collection = config['DEFAULT']['image_collection']
 
 client = MongoClient(mongoIP, mongoPort)
 db = client[mongoDB]
-db_images = db[imageCollection]
+db_images = db[image_collection]
 
 abbreviations = {}
 

@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.bson.Document;
+import org.ini4j.Wini;
 import org.json.*;
 
 import com.mongodb.BasicDBObject;
@@ -41,7 +42,13 @@ public class Updater {
 		// Dates in Format yyyy-MM-dd
 		fromDate = java.time.LocalDate.now().toString();
 		untilDate = java.time.LocalDate.now().toString();
-
+		File f = new File("config.ini");
+		if(f.exists() && !f.isDirectory()) { 
+			Wini ini = new Wini(new File("config.ini"));
+			fromDate = ini.get("DEFAULT", "lastdate");
+			mongoURI = "mongodb://" + ini.get("DEFAULT", "mongoip") + "/" + ini.get("DEFAULT", "mongoport");
+			mongoDB = ini.get("DEFAULT", "mongodb");
+		}
 		readArgs(args);
 
 		if (downloadPMC) {
@@ -51,10 +58,6 @@ public class Updater {
 			MongoDatabase database = mongoClient.getDatabase(mongoDB);
 			collection = database.getCollection(mongoCollection);
 
-			new File(outputFolder + "DownloadedArticles/Copernicus").mkdirs();
-			new File(outputFolder + "DownloadedArticles/Hindawi").mkdirs();
-			new File(outputFolder + "DownloadedArticles/Springer").mkdirs();
-			new File(outputFolder + "DownloadedArticles/Frontiers").mkdirs();
 			new File(outputFolder + "NewArticleDOIs").mkdirs();
 
 			System.setProperty("http.agent", "curl/7.51.0");
@@ -100,21 +103,25 @@ public class Updater {
 				writer.close();
 
 				if (entry.getKey().equals("Frontiers Media S.A.")) {
+					new File(outputFolder + "DownloadedArticles/Frontiers").mkdirs();
 					System.out.println("Downloading articles from " + entry.getKey());
 					for (String doi : entry.getValue()) {
 						FrontiersDownloader.downloadArticle(doi, outputFolder);
 					}
 				} else if (entry.getKey().equals("Hindawi Limited")) {
+					new File(outputFolder + "DownloadedArticles/Hindawi").mkdirs();
 					System.out.println("Downloading articles from " + entry.getKey());
 					for (String doi : entry.getValue()) {
 						HindawiDownloader.downloadArticle(doi, outputFolder);
 					}
 				} else if (entry.getKey().equals("SpringerOpen")) {
+					new File(outputFolder + "DownloadedArticles/Springer").mkdirs();
 					System.out.println("Downloading articles from " + entry.getKey());
 					for (String doi : entry.getValue()) {
 						SpringerDownloader.downloadArticle(doi, outputFolder);
 					}
 				} else if (entry.getKey().equals("Copernicus Publications")) {
+					new File(outputFolder + "DownloadedArticles/Copernicus").mkdirs();
 					System.out.println("Downloading articles from " + entry.getKey());
 					for (String doi : entry.getValue()) {
 						CopernicusDownloader.downloadArticle(doi, outputFolder);

@@ -172,7 +172,7 @@ def find_acronym():
         
 client = MongoClient(mongoIP, mongoPort)
 db = client[mongoDB]
-db_images = db[image_Collection]
+db_images = db[image_collection]
 db_articles = db[article_collection]
 articles = db_articles.find({})
 

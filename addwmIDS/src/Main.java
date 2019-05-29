@@ -1,5 +1,6 @@
 import com.mongodb.*;
 import org.bson.types.ObjectId;
+import org.ini4j.Wini;
 
 import java.io.*;
 import java.net.URL;
@@ -19,7 +20,14 @@ public class Main {
 	static String mongoDB;
 	static String mongoCollection;
 
-    public static void main (String[] args) throws IOException {
+    public static void main (String[] args) throws IOException {    	
+		File f = new File("config.ini");
+		if(f.exists() && !f.isDirectory()) { 
+			Wini ini = new Wini(new File("config.ini"));
+			mongoURI = "mongodb://" + ini.get("DEFAULT", "mongoip") + "/" + ini.get("DEFAULT", "mongoport");
+			mongoDB = ini.get("DEFAULT", "mongodb");
+			mongoCollection = ini.get("DEFAULT", "image_collection");
+		}
     	readArgs(args);
         MongoClient mongoClient = new MongoClient(new MongoClientURI(mongoURI));
         DB database = mongoClient.getDB(mongoDB);

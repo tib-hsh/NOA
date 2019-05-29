@@ -1,6 +1,7 @@
 import com.mongodb.*;
 
 import org.apache.commons.io.FileUtils;
+import org.ini4j.Wini;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -27,8 +28,14 @@ public class addDiscipline {
 
 	public static void main(String[] args) throws IOException {
 
+		File f = new File("config.ini");
+		if(f.exists() && !f.isDirectory()) { 
+			Wini ini = new Wini(new File("config.ini"));
+			mongoAdress = "mongodb://" + ini.get("DEFAULT", "mongoip") + "/" + ini.get("DEFAULT", "mongoport");
+			dbName = ini.get("DEFAULT", "mongodb");
+			collectionName = ini.get("DEFAULT", "article_collection");
+		}
 		readArgs(args);
-
 		MongoClient mongoClient = new MongoClient(new MongoClientURI(mongoAdress));
 		DB database = mongoClient.getDB(dbName);
 		DBCollection collection = database.getCollection(collectionName);

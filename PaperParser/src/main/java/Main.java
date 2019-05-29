@@ -2,6 +2,7 @@ import metadata.Author;
 import metadata.Citation;
 import metadata.ID;
 import org.apache.log4j.*;
+import org.ini4j.Wini;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -65,6 +66,16 @@ public class Main
 
 	public static void main(String[] args) throws IOException
 	{
+		
+		File f = new File("config.ini");
+		if(f.exists() && !f.isDirectory()) { 
+			Wini ini = new Wini(new File("config.ini"));
+			mongoIP = ini.get("DEFAULT", "mongoip");
+			mongoPort =  ini.get("DEFAULT", "mongoport", int.class);
+			mongoDataBase = ini.get("DEFAULT", "mongodb");
+			mongoJournalcol = ini.get("DEFAULT", "article_collection");
+			mongoImageCol = ini.get("DEFAULT", "image_collection");
+		}
 		readArgs(args);
 
 
