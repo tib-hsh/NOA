@@ -1,7 +1,9 @@
 # WikiThes
-Adds Wikipedia categories to image collection.
+Adds Wikipedia categories to image collection.  
 
-Run using the following order and arguments:  
-1. `python findwikiterms.py -mongoIP [IP] -mongoPort [Port] -mongoDB [DB] -imageCollection [imageCollection]`  
-2. `python idf.py -mongoIP [IP] -mongoPort [Port] -mongoDB [DB] -imageCollection [imageCollection]`  
-3. `python assigncatsDS.py -mongoIP [IP] -mongoPort [Port] -mongoDB [DB] -imageCollection [imageCollection]` 
+mongoIP, mongoPort, mongoDB and image_colection need to be specified in config.ini.  
+
+Run in the following order:  
+1. `python findwikiterms.py`  
+2. `python idf.py`  
+3. `python assigncatsDS.py` 

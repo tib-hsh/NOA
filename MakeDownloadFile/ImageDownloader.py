@@ -1,20 +1,20 @@
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-import argparse
+import configparser
 
-argpar = argparse.ArgumentParser()
-argpar.add_argument("-mongoIP", type=str, required=True)
-argpar.add_argument("-mongoPort", type=int, required=True)
-argpar.add_argument("-mongoDB", type=str, required=True)
-argpar.add_argument("-imageCollection", type=str, required=True)
-argpar.add_argument("-articleCollection", type=str, required=True)
-argpar.add_argument("-filename", type=str, required=True)
-args = argpar.parse_args()
+config = configparser.ConfigParser()
+config.read('config.ini', encoding='utf-8-sig')
 
-client = MongoClient(args.mongoIP, args.mongoPort)
-db = client[args.mongoDB]
-article_collection = db[args.articleCollection]
-img_collection = db[args.imageCollection]
+mongoIP = config['DEFAULT']['mongoIP']
+mongoPort = int(config['DEFAULT']['mongoPort'])
+mongoDB = config['DEFAULT']['mongoDB']
+article_collection = config['DEFAULT']['article_collection']
+image_collection = config['DEFAULT']['image_collection']
+
+client = MongoClient(mongoIP, mongoPort)
+db = client[mongoDB]
+article_collection = db[article_collection]
+img_collection = db[image_collection]
 
 imagecount = 0
 i_skipped = 0
@@ -39,7 +39,7 @@ for f in findings:
         path = publisher + '/' + pathJournalName + '/' + year + '/' + Dumb_DOI + '/'
         root = "images/"
         imagecount += 1
-        with open(args.filename, 'a', encoding="utf-8") as myfile:
+        with open("DownloadURLs.txt", 'a', encoding="utf-8") as myfile:
             print(path)
             print(URL)
             extension = URL.split('.')[-1]

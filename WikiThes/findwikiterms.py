@@ -7,21 +7,28 @@ import json
 import codecs
 import nltk
 import re
+import configparser
+
+config = configparser.ConfigParser()
+config.read('config.ini', encoding='utf-8-sig')
+
+mongoIP = config['DEFAULT']['mongoIP']
+mongoPort = int(config['DEFAULT']['mongoPort'])
+mongoDB = config['DEFAULT']['mongoDB']
+article_collection = config['DEFAULT']['article_collection']
+image_collection = config['DEFAULT']['image_collection']
+
 
 argpar = argparse.ArgumentParser(description='Find wikipedia terms and store them in Mongo.')
 argpar.add_argument('-verbose', action='store_true')
-argpar.add_argument("-mongoIP", type=str, required=True)
-argpar.add_argument("-mongoPort", type=int, required=True)
-argpar.add_argument("-mongoDB", type=str, required=True)
-argpar.add_argument("-imageCollection", type=str, required=True)
 args = argpar.parse_args()
 verbose = args.verbose
 
 vowel = re.compile(r'[aouei]')
 
-client = MongoClient(args.mongoIP, args.mongoPort)
-db = client[args.mongoDB]
-collection = db[args.imageCollection]
+client = MongoClient(mongoIP, mongoPort)
+db = client[mongoDB]
+collection = db[image_collection]
 
 swlist = stopwords.words('english')
 

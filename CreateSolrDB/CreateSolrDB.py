@@ -2,28 +2,24 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 import re
 import sys
+import configparser
 
-params={}
+config = configparser.ConfigParser()
+config.read('config.ini', encoding='utf-8-sig')
 
-if __name__ == "__main__":
-    sizeOfArgs = len(sys.argv)
-    sizeOfArgs-=1
-    if sizeOfArgs == 0 or sizeOfArgs%2!=0:
-        raise Exception('Wrong number of arguments')
-    for e in range((int)(sizeOfArgs/2)):
-        key=sys.argv[e*2+1]
-        val=sys.argv[e*2+2]
-        if "-" not in key or len(key)<2:
-            raise Exception('Error with Param #'+str(e))
-        params[key[1:]]=val
-    print("Got Params: ", params)
+mongoIP = config['DEFAULT']['mongoIP']
+mongoPort = int(config['DEFAULT']['mongoPort'])
+mongoDB = config['DEFAULT']['mongoDB']
+article_collection = config['DEFAULT']['article_collection']
+image_collection = config['DEFAULT']['image_collection']
+solr_collection = config['DEFAULT']['solr_collection']
 
 
-client = MongoClient(params['mongoIP'], int(params['mongoPort']))
-db = client[params['mongoDB']]
-imageCollection = db[params['imageCollection']]
-journalCollection = db[params['articleCollection']]
-target_col = db[params['targetCollection']]
+client = MongoClient(mongoIP, mongoPort)
+db = client[mongoDB]
+imageCollection = db[image_collection]
+articleCollection = db[article_collection]
+target_col = db[solr_collection]
 imagecount = 0
 i_skipped = 0
 
@@ -36,26 +32,12 @@ for f in findings:
     findingID = f['findingID']
     CAPTION = f['captionBody']
 
-    article = journalCollection.find_one({"_id": ObjectId(source)})
+    article = articleCollection.find_one({"_id": ObjectId(source)})
     journalName = str(article['journalName'])
     pathJournalName = str(article['journalName']).replace(' ', '_')
     year = article['year']
     Dumb_DOI = str(DOI).replace('/', '_')
-    path2file = article['path2file']
-    publisher= ""
-    publisher = str(article['publisher'])
-    if "Hindawi" in path2file:
-        publisher = "Hindawi"
-    elif "Springer" in path2file:
-        publisher = "Springer"
-    elif "PubMed" in path2file:
-        publisher = "PubMed"
-    elif "PMC" in path2file:
-        publisher = "PubMed"
-    elif "Copernicus" in publisher:
-        publisher = "Copernicus"
-    elif "frontiers" in path2file:
-        publisher = "Frontiers"
+    publisher = str(article['source'])
     path = str(publisher) + '/' + str(pathJournalName) + '/' + str(year) + '/' + str(Dumb_DOI) + '/'
     root = "images/"
     path2 = root + path
@@ -90,4 +72,4 @@ for f in findings:
         i_skipped+=1
         print("Error skipped #"+str(i_skipped))
 print("end")
-print(imagecount, "Images added to", params['targetCollection'])
+print(imagecount, "Images added to", solr_collection)

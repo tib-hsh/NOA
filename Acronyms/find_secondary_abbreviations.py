@@ -4,26 +4,21 @@ from pymongo import MongoClient
 tokenizer = WhitespaceTokenizer()
 import json
 import sys
+import configparser
 
-params={}
+config = configparser.ConfigParser()
+config.read('config.ini', encoding='utf-8-sig')
 
-if __name__ == "__main__":
-    sizeOfArgs = len(sys.argv)
-    sizeOfArgs-=1
-    if sizeOfArgs == 0 or sizeOfArgs%2!=0:
-        raise Exception('Wrong number of arguments')
-    for e in range((int)(sizeOfArgs/2)):
-        key=sys.argv[e*2+1]
-        val=sys.argv[e*2+2]
-        if "-" not in key or len(key)<2:
-            raise Exception('Error with Param #'+str(e))
-        params[key[1:]]=val
-    print("Got Params: ", params)
+mongoIP = config['DEFAULT']['mongoIP']
+mongoPort = int(config['DEFAULT']['mongoPort'])
+mongoDB = config['DEFAULT']['mongoDB']
+article_collection = config['DEFAULT']['article_collection']
+image_collection = config['DEFAULT']['image_collection']
     
-client = MongoClient(params['mongoIP'], int(params['mongoPort']))
-db = client[params['mongoDB']]
-db_images = db[params['imageCollection']]
-db_articles = db[params['articleCollection']]
+client = MongoClient(mongoIP, mongoPort)
+db = client[mongoDB]
+db_images = db[image_collection]
+db_articles = db[article_collection]
 
 total_time = time.time()
 start = time.time()

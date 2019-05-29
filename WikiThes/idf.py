@@ -3,22 +3,23 @@ import collections
 import json
 import codecs
 import math
-import argparse
+import configparser
 
-argpar = argparse.ArgumentParser()
-argpar.add_argument("-mongoIP", type=str, required=True)
-argpar.add_argument("-mongoPort", type=int, required=True)
-argpar.add_argument("-mongoDB", type=str, required=True)
-argpar.add_argument("-imageCollection", type=str, required=True)
-args = argpar.parse_args()
+config = configparser.ConfigParser()
+config.read('config.ini', encoding='utf-8-sig')
+
+mongoIP = config['DEFAULT']['mongoIP']
+mongoPort = int(config['DEFAULT']['mongoPort'])
+mongoDB = config['DEFAULT']['mongoDB']
+image_collection = config['DEFAULT']['image_collection']
 
 #dfs = {}
 dfs = collections.Counter()
 N = 0
 
-client = MongoClient(args.mongoIP, args.mongoPort)
-db = client[args.mongoDB]
-collection = db[args.imageCollection]
+client = MongoClient(mongoIP, mongoPort)
+db = client[mongoDB]
+collection = db[image_collection]
 
 processed = 0
 records = collection.find({})

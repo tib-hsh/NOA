@@ -1,8 +1,7 @@
 # CreateSolrDB
-Creates new database collection with all fields needed by the search engine.
+Creates new database collection with all fields needed by the search engine.  
 
-Run using the following arguments:  
-`python CreateSolrDB.py -mongoIP [IP] -mongoPort [Port] -mongoDB [DB] -imageCollection [imageCollection] -articleCollection [articleCollection] -targetCollection [targetCollection]`
+mongoIP, mongoPort, mongoDB, image_colection, article_collection and solr_collection need to be specified in config.ini.  
 
 The following field names are used:  
 journalName  

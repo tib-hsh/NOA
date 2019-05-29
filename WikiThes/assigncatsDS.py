@@ -6,14 +6,15 @@ import pprint
 import math
 import numpy as np
 import nltk
-import argparse
+import configparser
 
-argpar = argparse.ArgumentParser()
-argpar.add_argument("-mongoIP", type=str, required=True)
-argpar.add_argument("-mongoPort", type=int, required=True)
-argpar.add_argument("-mongoDB", type=str, required=True)
-argpar.add_argument("-imageCollection", type=str, required=True)
-args = argpar.parse_args()
+config = configparser.ConfigParser()
+config.read('config.ini', encoding='utf-8-sig')
+
+mongoIP = config['DEFAULT']['mongoIP']
+mongoPort = int(config['DEFAULT']['mongoPort'])
+mongoDB = config['DEFAULT']['mongoDB']
+image_collection = config['DEFAULT']['image_collection']
 
 
 w2vec = {}
@@ -54,9 +55,9 @@ with open("wikihypernym.json") as fin:
     hyper = json.loads(fin.read(),encoding="utf-8")    
     
 
-client = MongoClient(args.mongoIP, args.mongoPort)
-db = client[args.mongoDB]
-collection = db[args.imageCollection]
+client = MongoClient(mongoIP, mongoPort)
+db = client[mongoDB]
+collection = db[image_collection]
 
 def aggregated_vector(text):
     matches = 0
@@ -155,6 +156,7 @@ def categories(terms,caption):
 
 records = collection.find({})
 processed = 0
+i = 0
 for f in records:
     processed += 1
     if processed % 1000 == 0:
@@ -168,6 +170,8 @@ for f in records:
 
     if wikiterms == None or len(wikiterms) == 0:
         continue
+    i += 1
+    print(i)
     wpcats = categories(wikiterms,caption)[:5]
 	
     print(f['DOI'],findingID)
