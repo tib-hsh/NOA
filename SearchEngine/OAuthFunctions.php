@@ -1,8 +1,8 @@
 <?php
 /**
-File for handeling OAuth authorization and other functions regarding the Upload Tool
-Based on the following guide: https://tools.wmflabs.org/oauth-hello-world/index.php?action=download
-*/
+ *File for handeling OAuth authorization and other functions regarding the Upload Tool
+ *Based on the following guide: https://tools.wmflabs.org/oauth-hello-world/index.php?action=download
+ */
 
 session_name('OAuthNOA');
 $params = session_get_cookie_params();
