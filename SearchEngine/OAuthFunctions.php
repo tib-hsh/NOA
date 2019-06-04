@@ -20,8 +20,6 @@ $mwOAuthAuthorizeUrl = 'https://commons.wikimedia.org/wiki/Special:OAuth/authori
 $mwOAuthUrl = 'https://commons.wikimedia.org/w/index.php?title=Special:OAuth';
 $mwOAuthIW = 'commons';
 
-
-
 $apiUrl = 'https://commons.wikimedia.org/w/api.php';
 $errorCode = 200;
 $gTokenSecret = '';
