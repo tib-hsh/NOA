@@ -1,7 +1,7 @@
 <?php
 /**
-Uploads image which is passed by uploadtool.js via the Wikimedia API
-*/
+ * Uploads image which is passed by uploadtool.js via the Wikimedia API
+ */
 
 include 'OAuthFunctions.php';
 session_name('OAuthNOA');
