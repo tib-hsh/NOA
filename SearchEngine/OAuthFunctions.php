@@ -1,6 +1,7 @@
 <?php
 /**
 File for handeling OAuth authorization and other functions regarding the Upload Tool
+Based on the following guide: https://tools.wmflabs.org/oauth-hello-world/index.php?action=download
 */
 
 session_name('OAuthNOA');
@@ -151,11 +152,11 @@ function sign_request($method, $url, $params = array()) {
  *
  * @param array $post Post data
  * @param object $ch Curl handle
+ * @param string $mode mode for special cases
  * @return array API results
  */
 function doApiQuery($post, &$ch = null, $mode) {
     global $apiUrl, $gUserAgent, $gConsumerKey, $gTokenKey, $errorCode;
-
 
     $headerArr = array(
         // OAuth information
@@ -168,6 +169,7 @@ function doApiQuery($post, &$ch = null, $mode) {
         'oauth_signature_method' => 'HMAC-SHA1',
     );
 
+    // In case of file upload we don't want to sign and urlencode our file
     $to_sign = '';
     if ($mode == 'upload') {
         $to_sign = $headerArr;
@@ -203,6 +205,8 @@ function doApiQuery($post, &$ch = null, $mode) {
     curl_setopt($ch, CURLOPT_HEADER, 0);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     $data = curl_exec($ch);
+    
+    // Don't show error message when checking if user account is connected
     if (!$data  && $mode != 'userinfo') {
         header("HTTP/1.1 $errorCode Internal Server Error");
         echo 'Curl error: ' . htmlspecialchars(curl_error($ch));
