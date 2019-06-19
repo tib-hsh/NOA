@@ -25,6 +25,8 @@ public class addDiscipline {
 	static String mongoAdress;
 	static String dbName;
 	static String collectionName;
+	static String dataFolder = "";
+	static String tmpFolder = "";
 
 	public static void main(String[] args) throws IOException {
 
@@ -34,6 +36,8 @@ public class addDiscipline {
 			mongoAdress = "mongodb://" + ini.get("DEFAULT", "mongoip") + "/" + ini.get("DEFAULT", "mongoport");
 			dbName = ini.get("DEFAULT", "mongodb");
 			collectionName = ini.get("DEFAULT", "article_collection");
+			dataFolder = ini.get("DEFAULT", "data_folder") + "/";
+			tmpFolder = ini.get("DEFAULT", "tmp_folder") + "/";
 		}
 		readArgs(args);
 		MongoClient mongoClient = new MongoClient(new MongoClientURI(mongoAdress));
@@ -51,7 +55,7 @@ public class addDiscipline {
 					String result = requestEZB(journal);
 					System.out.println(result);
 
-					FileWriter writer = new FileWriter("disciplines.csv", true);
+					FileWriter writer = new FileWriter(tmpFolder + "disciplines.csv", true);
 					writer.write(result + System.lineSeparator());
 					writer.close();
 				}
@@ -59,7 +63,7 @@ public class addDiscipline {
 		}
 		mongoClient.close();
 
-		writeFileToDB("disciplines.csv");
+		writeFileToDB(tmpFolder + "disciplines.csv");
 	}
 
 	private static void readArgs(String[] args) {
@@ -116,7 +120,7 @@ public class addDiscipline {
 
 	private static String requestEZBredirect(String journal, String request) throws IOException {
 
-		List<String> lines = FileUtils.readLines(new File("translatedDisciplines.txt"), "utf-8");
+		List<String> lines = FileUtils.readLines(new File(dataFolder + "translatedDisciplines.txt"), "utf-8");
 		HashMap<String, String> dictionary = new HashMap<String, String>();
 		for (String l : lines) {
 			String[] parts = l.split(";");

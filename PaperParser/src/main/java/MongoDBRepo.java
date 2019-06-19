@@ -69,7 +69,7 @@ public class MongoDBRepo
 	}
 
 
-	public void writeJournal(ResultSetJournal rsj, boolean withDownload)
+	public void writeJournal(ResultSetJournal rsj, boolean withDownload, String dataFolder)
 	{
 		Document d = new Document("journalName", rsj.getJournalName());
 		d.put("_id", new ObjectId());
@@ -237,7 +237,7 @@ public class MongoDBRepo
 					copyrightFlag = true;
 				}
                     try {
-                        BufferedReader br = new BufferedReader(new FileReader("checklines.txt"));
+                        BufferedReader br = new BufferedReader(new FileReader(dataFolder + "checklines.txt"));
                         String line;
                         while ((line = br.readLine()) != null) {
                             if (caption.contains(line)) {

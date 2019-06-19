@@ -57,6 +57,7 @@ public class Main
 	static String mongoErrorCol = "NOA_Errors";
 	static String mongoJournalcol = "NOA_Journals";
 	static String mongoImageCol = "NOA_Images";
+	static String dataFolder = "";
 	static boolean withDownload = false; //Download Images as binary data?
 	static int outPutFormat = 2; // 0=path, 1= current/overall, 2=percentage.
 	static String uniqueHash = "uniquehashString to fill";
@@ -75,6 +76,7 @@ public class Main
 			mongoDataBase = ini.get("DEFAULT", "mongodb");
 			mongoJournalcol = ini.get("DEFAULT", "article_collection");
 			mongoImageCol = ini.get("DEFAULT", "image_collection");
+			dataFolder = ini.get("DEFAULT", "data_folder") + "/";
 		}
 		readArgs(args);
 
@@ -290,7 +292,7 @@ public class Main
 			context(rsj);
 			//System.out.print("context");System.out.println(System.currentTimeMillis() - start);
 			//start = System.currentTimeMillis();
-			MongoDBRepo.getInstance(mongoIP, mongoPort, mongoDataBase).writeJournal(rsj, withDownload);
+			MongoDBRepo.getInstance(mongoIP, mongoPort, mongoDataBase).writeJournal(rsj, withDownload, dataFolder);
 			//System.out.print("mondowrite");System.out.println(System.currentTimeMillis() - start);
 			references.clear();
 			figureContext.clear();

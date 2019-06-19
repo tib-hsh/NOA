@@ -48,6 +48,7 @@ public class Updater {
 			fromDate = ini.get("DEFAULT", "lastdate");
 			mongoURI = "mongodb://" + ini.get("DEFAULT", "mongoip") + "/" + ini.get("DEFAULT", "mongoport");
 			mongoDB = ini.get("DEFAULT", "mongodb");
+			outputFolder = ini.get("DEFAULT", "tmp_folder") + "/";
 		}
 		readArgs(args);
 
