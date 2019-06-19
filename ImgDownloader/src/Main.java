@@ -1,5 +1,3 @@
-package de.hsh.textmining;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -12,10 +10,11 @@ public class Main {
     static int counter=0;
     private static final int NTHREDS = 10;
     private static ExecutorService executor=Executors.newFixedThreadPool(NTHREDS);
+    static boolean tooManyRequests;
 
     public static void main(String[] args) {
 
-        System.out.println("Start PaperDownloader on file  "+args[0] );
+        //System.out.println("Start PaperDownloader on file  "+args[0] );
         //read file into stream, try-with-resources
         try (Stream<String> stream = Files.lines(Paths.get(args[0]))) {
             //Create Task and hand it over to Executor
