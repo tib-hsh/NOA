@@ -17,6 +17,7 @@ mongoPort = int(config['DEFAULT']['mongoPort'])
 mongoDB = config['DEFAULT']['mongoDB']
 article_collection = config['DEFAULT']['article_collection']
 image_collection = config['DEFAULT']['image_collection']
+data_folder = config['DEFAULT']['data_folder']
 
 
 argpar = argparse.ArgumentParser(description='Find wikipedia terms and store them in Mongo.')
@@ -119,7 +120,7 @@ def readterms(fname):
     return dict(zip(map(str.lower,wc.keys()),wc.values()))
 
     
-wikiterms = readterms("wikicats.json")
+wikiterms = readterms(data_folder + "/wikicats.json")
 #wikiterms = readterms("wikicatsrd.json")
 #wikiterms = {**wikiterms1, **wikiterms2}
 

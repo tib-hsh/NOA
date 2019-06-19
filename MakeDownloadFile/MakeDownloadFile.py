@@ -10,6 +10,7 @@ mongoPort = int(config['DEFAULT']['mongoPort'])
 mongoDB = config['DEFAULT']['mongoDB']
 article_collection = config['DEFAULT']['article_collection']
 image_collection = config['DEFAULT']['image_collection']
+tmp_folder = config['DEFAULT']['tmp_folder']
 
 client = MongoClient(mongoIP, mongoPort)
 db = client[mongoDB]
@@ -39,9 +40,9 @@ for f in findings:
         path = publisher + '/' + pathJournalName + '/' + year + '/' + Dumb_DOI + '/'
         root = "images/"
         imagecount += 1
-        with open("DownloadURLs.txt", 'a', encoding="utf-8") as myfile:
-            print(path)
-            print(URL)
+        with open(tmp_folder + "/DownloadURLs.txt", 'a', encoding="utf-8") as myfile:
+            #print(path)
+            #print(URL)
             extension = URL.split('.')[-1]
             myfile.write(URL + " " + root + path + str(findingID) + "." + extension + "\n")
 print("end")

@@ -15,7 +15,8 @@ mongoIP = config['DEFAULT']['mongoIP']
 mongoPort = int(config['DEFAULT']['mongoPort'])
 mongoDB = config['DEFAULT']['mongoDB']
 image_collection = config['DEFAULT']['image_collection']
-
+data_folder = config['DEFAULT']['data_folder']
+tmp_folder = config['DEFAULT']['tmp_folder']
 
 w2vec = {}
 w2vdim = 0
@@ -32,7 +33,7 @@ with open("concreteness.csv") as fin:
             concr[w] = c  
 """
 
-with open("w2v_noa.txt") as fin:
+with open(data_folder + "/w2v_noa.txt") as fin:
     for line in fin:
         w,v = line.split('\t')
         v = np.array(list(map(float,v.split())))
@@ -42,16 +43,16 @@ with open("w2v_noa.txt") as fin:
             w2vdim = len(v)
 
 
-with open("wikicats.json") as fin:
+with open(data_folder + "/wikicats.json") as fin:
     wikicats = json.loads(fin.read(),encoding="utf-8")
     
 wikicats = {a.lower():wikicats[a] for a in wikicats}
 
     
-with open("idf.json") as fin:
+with open(tmp_folder + "/idf.json") as fin:
     idf = json.loads(fin.read(),encoding="utf-8")
 
-with open("wikihypernym.json") as fin:
+with open(data_folder + "/wikihypernym.json") as fin:
     hyper = json.loads(fin.read(),encoding="utf-8")    
     
 
@@ -171,12 +172,8 @@ for f in records:
     if wikiterms == None or len(wikiterms) == 0:
         continue
     i += 1
-    print(i)
+    #print(i)
     wpcats = categories(wikiterms,caption)[:5]
-	
-    print(f['DOI'],findingID)
-    for wt in wpcats:
-        print('+',wt)
 
     #collection.update({'_id': f['_id']},{'$unset': {'wpcats': 1 }}, multi=True)
     collection.update({'_id': f['_id']},{'$set':   {'wpcats': wpcats}}, upsert=False, multi=False)

@@ -88,6 +88,9 @@ public class Updater {
 				if (tokenArray.has("content")) {
 					token = tokenArray.getString("content");
 				}
+				if(cursor == tokenArray.getInt("cursor")) {
+					break;
+				}
 				cursor = tokenArray.getInt("cursor");
 				getDOIs(listRecords);
 				System.out.println(cursor + "/" + listSize);

@@ -1,7 +1,7 @@
 # WikiThes
 Adds Wikipedia categories to image collection.  
 
-mongoIP, mongoPort, mongoDB and image_colection need to be specified in config.ini.  
+mongoIP, mongoPort, mongoDB, image_colection, data_folder and tmp_folder need to be specified in config.ini.  
 
 Run in the following order:  
 1. `python findwikiterms.py`  

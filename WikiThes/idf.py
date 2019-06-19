@@ -12,6 +12,7 @@ mongoIP = config['DEFAULT']['mongoIP']
 mongoPort = int(config['DEFAULT']['mongoPort'])
 mongoDB = config['DEFAULT']['mongoDB']
 image_collection = config['DEFAULT']['image_collection']
+tmp_folder = config['DEFAULT']['tmp_folder']
 
 #dfs = {}
 dfs = collections.Counter()
@@ -44,7 +45,7 @@ for term in dfs:
         
 #idfs = dict(sorted(idfs.items(), key=lambda x: x[1], reverse=True))
         
-with codecs.open("idf.json", "w","utf-8") as fout:
+with codecs.open(tmp_folder + "/idf.json", "w","utf-8") as fout:
     fout.write(json.dumps(idfs, indent=4))
 
 

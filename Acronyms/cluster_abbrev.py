@@ -11,6 +11,7 @@ mongoIP = config['DEFAULT']['mongoIP']
 mongoPort = int(config['DEFAULT']['mongoPort'])
 mongoDB = config['DEFAULT']['mongoDB']
 image_collection = config['DEFAULT']['image_collection']
+tmp_folder = config['DEFAULT']['tmp_folder']
 
 client = MongoClient(mongoIP, mongoPort)
 db = client[mongoDB]
@@ -138,6 +139,6 @@ print("Number of Unambiguous Abbreviations = ",nrOfUnamb)
 print("Average Number of Expansions = ", float(nrOfExpansions)/float(nrOfAbbr))
 
 
-data_file = codecs.open('abbreviations_clust.json','w','utf-8')    
+data_file = codecs.open(tmp_folder + '/abbreviations_clust.json','w','utf-8')    
 json.dump(ext_abr,data_file)
 data_file.close()

@@ -14,6 +14,7 @@ mongoPort = int(config['DEFAULT']['mongoPort'])
 mongoDB = config['DEFAULT']['mongoDB']
 article_collection = config['DEFAULT']['article_collection']
 image_collection = config['DEFAULT']['image_collection']
+tmp_folder = config['DEFAULT']['tmp_folder']
     
 client = MongoClient(mongoIP, mongoPort)
 db = client[mongoDB]
@@ -27,7 +28,7 @@ start = time.time()
 #           build the cluster dictionary
 ##########################################################################################
 print('Stage 1')
-with open("abbreviations_clust.json") as data_file:
+with open(tmp_folder + "/abbreviations_clust.json") as data_file:
     abrclust = json.loads(data_file.read())
 normalform = {}
 for abr in abrclust:
