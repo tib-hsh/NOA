@@ -5,6 +5,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.ini4j.InvalidFileFormatException;
+import org.ini4j.Wini;
+
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
+
 /**
  * Created by charbonn on 17.10.2017.
  */
@@ -14,6 +23,7 @@ public class Runner implements Runnable {
 	boolean copernicus = false;
 	java.net.URL u;
 	HttpURLConnection huc;
+	String newURL;
 
 	Runner(String given) {
 		this.s = given;
@@ -45,9 +55,14 @@ public class Runner implements Runnable {
 		if (img.length > 0)
 			try {
 				save2Disk(img, split[1]);
+				// if URL was changed update Database
+				if (newURL != null) {
+					updateDB(newURL);
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+
 		else
 			writeError(split[0], split[1]);
 	}
@@ -68,7 +83,7 @@ public class Runner implements Runnable {
 		FileOutputStream fos = new FileOutputStream(s);
 		fos.write(img);
 		fos.close();
-		//System.out.println(s);
+		// System.out.println(s);
 	}
 
 	private int connect(String url) throws IOException {
@@ -79,19 +94,37 @@ public class Runner implements Runnable {
 		return huc.getResponseCode();
 	}
 
+	private void updateDB(String url) throws InvalidFileFormatException, IOException {
+		Wini ini = new Wini(new File("config.ini"));
+		String mongoAdress = "mongodb://" + ini.get("DEFAULT", "mongoip") + "/" + ini.get("DEFAULT", "mongoport");
+		MongoClient mongoClient = new MongoClient(new MongoClientURI(mongoAdress));
+		DB database = mongoClient.getDB(ini.get("DEFAULT", "mongodb"));
+		DBCollection collection = database.getCollection(ini.get("DEFAULT", "image_collection"));
+
+		BasicDBObject newDocument = new BasicDBObject();
+		newDocument.append("$set", new BasicDBObject().append("URL", url));
+
+		BasicDBObject searchQuery = new BasicDBObject().append("URL", s.split(" ")[0]);
+
+		collection.update(searchQuery, newDocument);
+		mongoClient.close();
+
+	}
+
 	private byte[] download(String gotten) throws IOException, InterruptedException {
 		String url = gotten;
 		int statusCode = connect(url);
-		//wait with Hindawi downloads if there where too many requests
+		// wait with Hindawi downloads if there where too many requests
 		if (hindawi && statusCode == 403) {
 			Main.tooManyRequests = true;
 			Thread.sleep(5 * 60 * 1000);
 			statusCode = connect(url);
-			Main.tooManyRequests = false;			
-		//for Copernicus images try to download high-res version
+			Main.tooManyRequests = false;
+			// for Copernicus images try to download high-res version
 		} else if (copernicus && statusCode == 404) {
 			int lastDot = url.lastIndexOf(".");
 			url = url.substring(0, lastDot) + "-high-res" + url.substring(lastDot, url.length());
+			newURL = url;
 			statusCode = connect(url);
 		}
 		if (statusCode != 404) {
