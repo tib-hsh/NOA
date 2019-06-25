@@ -43,33 +43,35 @@ for f in findings:
     path2 = root + path
     imagecount += 1
     DOI = str(Dumb_DOI).replace('_', '/')
-    document = {"journalName": journalName,
-                "year": year,
-                "DOI": DOI,
-                "title": article['title'],
-                "authors": article['authors'],
-                "URL": f['URL'],
-                "TIB_URL": root + path + str(findingID) + ".jpg",
-                "captionBody": f['captionBody'],
-                "captionTitle": f['captionTitle'],
-                "copyrightFlag": f['copyrightFlag'],
-                "license": article['license'],
-                "licenseType": f['licenseType'],
-                "discipline": article['discipline'],
-                "imageType": f['imageType'],
-                "publicationDate": article['publicationDate']
-                }
-    print(DOI)
-    if 'acronym' in f:
-        document['acronym'] = f['acronym']
-    if 'wpcats' in f:
-        document['wpcats'] = f['wpcats']
-    if 'wmcat' in f:
-        document['wmcat'] = f['wmcat']
-    if 'DownloadError:' not in f:
-        target_col.insert_one(document)
-    else:
-        i_skipped+=1
-        print("Error skipped #"+str(i_skipped))
+    try:
+        document = {"journalName": journalName,
+                    "year": year,
+                    "DOI": DOI,
+                    "title": article['title'],
+                    "authors": article['authors'],
+                    "URL": f['URL'],
+                    "TIB_URL": root + path + str(findingID) + ".jpg",
+                    "captionBody": f['captionBody'],
+                    "captionTitle": f['captionTitle'],
+                    "copyrightFlag": f['copyrightFlag'],
+                    "license": article['license'],
+                    "licenseType": f['licenseType'],
+                    "discipline": article['discipline'],
+                    "imageType": f['imageType'],
+                    "publicationDate": article['publicationDate']
+                    }
+        if 'acronym' in f:
+            document['acronym'] = f['acronym']
+        if 'wpcats' in f:
+            document['wpcats'] = f['wpcats']
+        if 'wmcat' in f:
+            document['wmcat'] = f['wmcat']
+        if 'DownloadError:' not in f:
+            target_col.insert_one(document)
+        else:
+            i_skipped+=1
+            print("Error skipped #"+str(i_skipped))
+    except:
+        print("An exception ocurred with image: " + URL)
 print("end")
 print(imagecount, "Images added to", solr_collection)
