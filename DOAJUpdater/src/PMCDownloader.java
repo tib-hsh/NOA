@@ -26,7 +26,7 @@ import com.mongodb.client.MongoDatabase;
 
 public class PMCDownloader {
 
-	public static void downloadArticles(String fromDate, String untilDate, String outputFolder) throws IOException {
+	public static void downloadArticles(String fromDate, String untilDate, String outputFolder, String mongoCollection) throws IOException {
 		new File(outputFolder + "DownloadedArticles/PMC").mkdirs();
 
 		// Get all articles published on PMC in specified timeframe
@@ -67,7 +67,7 @@ public class PMCDownloader {
 				"mongodb://" + ini.get("DEFAULT", "mongoip") + "/" + ini.get("DEFAULT", "mongoport")));
 		MongoDatabase database = mongoClient.getDatabase(ini.get("DEFAULT", "mongodb"));
 		outputFolder = ini.get("DEFAULT", "tmp_folder") + "/";
-		MongoCollection<Document> collection = database.getCollection("AllArticles");
+		MongoCollection<Document> collection = database.getCollection(mongoCollection);
 
 		int i = 0;
 		for (String pmcID : pmcIDs) {

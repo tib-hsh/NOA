@@ -54,7 +54,7 @@ public class Updater {
 
 		new File(outputFolder + "NewArticleDOIs").mkdirs();
 		if (downloadPMC) {
-			PMCDownloader.downloadArticles(fromDate, untilDate, outputFolder);
+			PMCDownloader.downloadArticles(fromDate, untilDate, outputFolder, mongoCollection);
 		} else {
 			MongoClient mongoClient = new MongoClient(new MongoClientURI(mongoURI));
 			MongoDatabase database = mongoClient.getDatabase(mongoDB);
@@ -130,9 +130,6 @@ public class Updater {
 						CopernicusDownloader.downloadArticle(doi, outputFolder);
 					}
 				}
-				// Set true to search for and download articles from PMC instead of DOAJ
-				downloadPMC = false;
-
 			}
 		}
 	}
@@ -158,8 +155,8 @@ public class Updater {
 			fromDate = arguments.get("fromDate");
 		if (arguments.containsKey("mongoImageCollection"))
 			untilDate = arguments.get("untilDate");
-		if (arguments.containsKey("downloadPMC") && arguments.get("downloadPMC") == "true")
-			downloadPMC = true;
+		if (arguments.containsKey("downloadPMC") && arguments.get("downloadPMC").equals("true"))
+			downloadPMC = true;				
 	}
 
 	// checks if URL exists
