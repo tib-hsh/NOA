@@ -530,7 +530,7 @@ public class Main
 							rsj.setIssue("Article ID " + currentNode.getTextContent());
 						}
 					}
-					if (currentNode.getAttributes().item(0).getNodeValue().equals("pmc-uid")) {
+					if (currentNode.getAttributes().item(0).getNodeValue().equals("pmc-uid") || currentNode.getAttributes().item(0).getNodeValue().equals("pmc")) {
 						rsj.setPmcID(currentNode.getTextContent());
 
 					}
