@@ -1,6 +1,4 @@
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,11 +9,11 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.io.IOUtils;
 import org.bson.Document;
+import org.ini4j.Wini;
 import org.json.JSONObject;
 
 import com.mongodb.BasicDBObject;
@@ -64,20 +62,19 @@ public class PMCDownloader {
 		}
 		writer.close();
 
-		Properties properties = new Properties();
-		BufferedInputStream stream = new BufferedInputStream(new FileInputStream("DOAJUpdater.properties"));
-		properties.load(stream);
-		stream.close();
-		MongoClient mongoClient = new MongoClient(new MongoClientURI(properties.getProperty("mongoURI")));
-		MongoDatabase database = mongoClient.getDatabase(properties.getProperty("dbName"));
+		Wini ini = new Wini(new File("config.ini"));
+		MongoClient mongoClient = new MongoClient(new MongoClientURI(
+				"mongodb://" + ini.get("DEFAULT", "mongoip") + "/" + ini.get("DEFAULT", "mongoport")));
+		MongoDatabase database = mongoClient.getDatabase(ini.get("DEFAULT", "mongodb"));
+		outputFolder = ini.get("DEFAULT", "tmp_folder") + "/";
 		MongoCollection<Document> collection = database.getCollection("AllArticles");
 
 		int i = 0;
 		for (String pmcID : pmcIDs) {
 			i++;
 			System.out.println("Downloading Article " + i + "/" + pmcIDs.size());
-			String filePath = outputFolder + "DownloadedArticles/PMC/PMC" + pmcID.replaceAll("oai:pubmedcentral\\.nih\\.gov:", "")
-					+ ".xml";
+			String filePath = outputFolder + "DownloadedArticles/PMC/PMC"
+					+ pmcID.replaceAll("oai:pubmedcentral\\.nih\\.gov:", "") + ".xml";
 			File f = new File(filePath);
 			if (f.exists() && !f.isDirectory()) {
 				continue;

@@ -34,7 +34,7 @@ public class Updater {
 	static String mongoURI;
 	static String mongoDB;
 	static String mongoCollection;
-	static boolean downloadPMC;
+	static boolean downloadPMC = true;
 
 	public static void main(String[] args)
 			throws IOException {
@@ -52,14 +52,13 @@ public class Updater {
 		}
 		readArgs(args);
 
+		new File(outputFolder + "NewArticleDOIs").mkdirs();
 		if (downloadPMC) {
 			PMCDownloader.downloadArticles(fromDate, untilDate, outputFolder);
 		} else {
 			MongoClient mongoClient = new MongoClient(new MongoClientURI(mongoURI));
 			MongoDatabase database = mongoClient.getDatabase(mongoDB);
 			collection = database.getCollection(mongoCollection);
-
-			new File(outputFolder + "NewArticleDOIs").mkdirs();
 
 			System.setProperty("http.agent", "curl/7.51.0");
 			// get first page of articles for specified time frame
