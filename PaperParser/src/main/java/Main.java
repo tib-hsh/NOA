@@ -48,7 +48,7 @@ public class Main
 	public static int articles = 0;
 	public static long numberOfDocs = -1;
 	public static long currentDoc = 0;
-	static String location = "Fill in the Paper Location here";
+	static String location = "";
 	static String outputEncoding = "UTF-8";
 	static int VERBOSE = 1;
 	static String mongoIP = "IP for mongoDB Server";
@@ -58,6 +58,7 @@ public class Main
 	static String mongoJournalcol = "NOA_Journals";
 	static String mongoImageCol = "NOA_Images";
 	static String dataFolder = "";
+	static String tmpFolder = "";
 	static boolean withDownload = false; //Download Images as binary data?
 	static int outPutFormat = 2; // 0=path, 1= current/overall, 2=percentage.
 	static String uniqueHash = "uniquehashString to fill";
@@ -77,6 +78,8 @@ public class Main
 			mongoJournalcol = ini.get("DEFAULT", "article_collection");
 			mongoImageCol = ini.get("DEFAULT", "image_collection");
 			dataFolder = ini.get("DEFAULT", "data_folder") + "/";
+			tmpFolder = ini.get("DEFAULT", "tmp_folder") + "/";
+			location = tmpFolder + "DownloadedArticles";
 		}
 		readArgs(args);
 
