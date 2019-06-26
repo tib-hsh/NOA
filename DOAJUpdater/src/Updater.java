@@ -34,7 +34,7 @@ public class Updater {
 	static String mongoURI;
 	static String mongoDB;
 	static String mongoCollection;
-	static boolean downloadPMC = true;
+	static boolean downloadPMC;
 
 	public static void main(String[] args)
 			throws IOException {
@@ -158,6 +158,8 @@ public class Updater {
 			fromDate = arguments.get("fromDate");
 		if (arguments.containsKey("mongoImageCollection"))
 			untilDate = arguments.get("untilDate");
+		if (arguments.containsKey("downloadPMC") && arguments.get("downloadPMC") == "true")
+			downloadPMC = true;
 	}
 
 	// checks if URL exists
