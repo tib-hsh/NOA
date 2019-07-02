@@ -31,7 +31,7 @@ public class FrontiersDownloader {
 		String downloadURL = "https://www.frontiersin.org/articles/" + doi + "/xml/nlm";
 
 		if (!Updater.exists(downloadURL)) {
-			FileWriter writer = new FileWriter(outputFolder + "NewArticleDOIs/NotDownloaded.txt", true);
+			FileWriter writer = new FileWriter(outputFolder + "NotDownloaded.txt", true);
 			writer.write(doi + System.lineSeparator());
 			writer.close();
 			return;

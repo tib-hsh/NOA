@@ -17,7 +17,7 @@ public class HindawiDownloader {
 		
 		String url = "https://doi.org/" + doi;
 		if(!Updater.exists(url)) {
-			FileWriter writer = new FileWriter(outputFolder + "NewArticleDOIs/NotDownloaded.txt", true);
+			FileWriter writer = new FileWriter(outputFolder + "NotDownloaded.txt", true);
 			writer.write(doi + System.lineSeparator());
 			writer.close();
 			return;
@@ -27,7 +27,7 @@ public class HindawiDownloader {
 		String articleURL = response.url().toString();
 		articleURL = "http://downloads" + articleURL.substring(11, articleURL.length()-1) + ".xml";
 		if(!Updater.exists(articleURL)) {
-			FileWriter writer = new FileWriter(outputFolder + "NewArticleDOIs/NotDownloaded.txt", true);
+			FileWriter writer = new FileWriter(outputFolder + "NotDownloaded.txt", true);
 			writer.write(doi + System.lineSeparator());
 			writer.close();
 			return;

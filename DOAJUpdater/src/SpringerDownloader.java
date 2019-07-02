@@ -15,7 +15,7 @@ public class SpringerDownloader {
 		
 		String url = "http://api.springer.com/openaccess/app?api_key=4df688ea8f1b339c208d1b8ef316f174&q=doi%3A" + doi;
 		if(!Updater.exists(url)) {
-			FileWriter writer = new FileWriter(outputFolder + "NewArticleDOIs/NotDownloaded.txt", true);
+			FileWriter writer = new FileWriter(outputFolder + "NotDownloaded.txt", true);
 			writer.write(doi + System.lineSeparator());
 			writer.close();
 			return;

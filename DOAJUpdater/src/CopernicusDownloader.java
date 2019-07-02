@@ -18,7 +18,7 @@ public class CopernicusDownloader {
 		
 		String url = "https://doi.org/" + doi;
 		if(!Updater.exists(url)) {
-			FileWriter writer = new FileWriter(outputFolder + "NewArticleDOIs/NotDownloaded.txt", true);
+			FileWriter writer = new FileWriter(outputFolder + "NotDownloaded.txt", true);
 			writer.write(doi + System.lineSeparator());
 			writer.close();
 			return;
@@ -28,7 +28,7 @@ public class CopernicusDownloader {
 		String articleURL = response.url().toString();
 		articleURL = articleURL + doi.substring(8) + ".xml";
 		if(!Updater.exists(articleURL)) {
-			FileWriter writer = new FileWriter(outputFolder + "NewArticleDOIs/NotDownloaded.txt");
+			FileWriter writer = new FileWriter(outputFolder + "NotDownloaded.txt");
 			writer.write(doi + System.lineSeparator());
 			writer.close();
 			return;

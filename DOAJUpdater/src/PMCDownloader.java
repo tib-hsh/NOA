@@ -9,6 +9,7 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.io.IOUtils;
@@ -56,12 +57,23 @@ public class PMCDownloader {
 		pmcIDs.replaceAll(s -> s.replaceFirst("<\\/identifier>", ""));
 
 		FileWriter writer;
-		writer = new FileWriter(outputFolder + "NewArticleDOIs/PMC.txt");
+		writer = new FileWriter(outputFolder + "NewDOIs_PMC.txt");
 		for (String str : pmcIDs) {
 			writer.write(str + System.lineSeparator());
 		}
 		writer.close();
-
+		
+		ArrayList<String> doajDOIs = new ArrayList<String>();
+		File newDOIs = new File(outputFolder + "NewDOIs.txt");
+		if(newDOIs.exists() && !newDOIs.isDirectory()) { 
+			Scanner s = new Scanner(newDOIs);
+			while (s.hasNext()){
+				doajDOIs.add(s.next());
+			}
+			s.close();
+		}
+		System.out.println(doajDOIs);
+		
 		Wini ini = new Wini(new File("config.ini"));
 		MongoClient mongoClient = new MongoClient(new MongoClientURI(
 				"mongodb://" + ini.get("DEFAULT", "mongoip") + "/" + ini.get("DEFAULT", "mongoport")));
@@ -86,6 +98,10 @@ public class PMCDownloader {
 			JSONObject jsonPMC = new JSONObject(IOUtils.toString(new URL(idConverterURL), Charset.forName("UTF-8")));
 			JSONObject records = jsonPMC.getJSONArray("records").getJSONObject(0);
 			if (records.has("doi")) {
+				if(doajDOIs.contains(records.getString("doi"))) {
+					System.out.println(records.getString("doi"));
+					continue;
+				}
 				BasicDBObject query = new BasicDBObject("DOI", records.getString("doi"));
 				FindIterable<Document> fi = collection.find(query);
 				MongoCursor<Document> cursor = fi.iterator();
@@ -98,7 +114,7 @@ public class PMCDownloader {
 			String downloadURL = "https://www.ncbi.nlm.nih.gov/pmc/oai/oai.cgi?verb=GetRecord&identifier=" + pmcID
 					+ "&metadataPrefix=pmc";
 			if (!Updater.exists(downloadURL)) {
-				writer = new FileWriter(outputFolder + "NewArticleDOIs/NotDownloaded.txt", true);
+				writer = new FileWriter(outputFolder + "NotDownloaded.txt", true);
 				writer.write(pmcID + System.lineSeparator());
 				writer.close();
 				return;
