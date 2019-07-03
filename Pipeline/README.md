@@ -3,6 +3,7 @@ This pipeline executes all programs from the NOA project in order to automate th
 
 ## System Requirements
 Java 8  
+MongoDB  
 Python 3  
 numpy  (tested with v1.14.3)  
 pymongo (tested with v3.4.0)  
