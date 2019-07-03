@@ -96,8 +96,10 @@ public class Updater {
 			}
 
 			mongoClient.close();
-
-			for (Map.Entry<String, List<String>> entry : newArticles.entrySet()) {
+			
+			new File(outputFolder).mkdirs();
+			
+			for (Map.Entry<String, List<String>> entry : newArticles.entrySet()) {			
 				FileWriter writer = new FileWriter(outputFolder + "NewDOIs.txt", true);
 				for (String str : entry.getValue()) {
 					writer.write(str + System.lineSeparator());
