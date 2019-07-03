@@ -61,11 +61,10 @@ img_folder = \<folder images are saved in>
 article_folder = <folder articles are saved in; insert "none" to delete articles>  
 
 3. To automate pipeline execution a crontab can be set up:  
-Change PATH in NOA_Pipeline.sh to the result of
+Change PATH in NOA_Pipeline.sh to the output of:
 ```console
 echo $PATH
-```
-for your user.  
+``` 
 
 Example crontab (executes once a day at 7:00AM and writes all output to pipelog.txt):  
 ```console
