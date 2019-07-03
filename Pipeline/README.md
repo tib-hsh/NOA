@@ -10,6 +10,8 @@ nltk (tested with v3.3)
 
 ## Required Files
 **Root folder:**  
+NOA_Pipeline.sh
+config.ini
 InitializePipeline.py  
 DOAJUpdater.jar  
 PaperParser.jar  
