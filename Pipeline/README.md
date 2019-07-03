@@ -1,7 +1,7 @@
 # Pipeline
 This pipeline executes all programs from the NOA project in order to automate the workflow.  
-Articles from different sources are downloaded and parsed into MongoDB starting from the last date of execution. Additional metadata such as disciplines and Wikimedia categories are then added. The images from the articles are downloaded and will be classified (work in progress). In our case the images are then moved to another server (this step can be removed in NOA_Pipeline.sh).  
-For each execution temporary Mongo collections for articles, images and our Solr search engine are created. At the end of the pipeline these temporary collections are added to collections AllArticles, AllImages and AllImagesSolr, where all previous data is stored. The temporary collections can then optionally be removed automatically (uncomment line in FinishPipeline.py).
+Articles from different sources are downloaded and parsed into MongoDB starting from the last date of execution. The current and last date are set in InitializePipeline.py. Additional metadata such as disciplines and Wikimedia categories are then added. The images from the articles are downloaded and will be classified (work in progress). In our case the images are then moved to another server (this step can be removed in NOA_Pipeline.sh).  
+For each execution temporary Mongo collections for articles, images and our Solr search engine are created. At the end in FinishPipeline.py these temporary collections are added to collections AllArticles, AllImages and AllImagesSolr, where all previous data is stored. The temporary collections can then optionally be removed automatically (uncomment line in FinishPipeline.py).
 Logs are stored in logs/pipelog_[date].txt. The output file configured in crontab must match the filename in FinishPipeline.py.
 
 
