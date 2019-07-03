@@ -1,7 +1,9 @@
 # Pipeline
 This pipeline executes all programs from the NOA project in order to automate the workflow.  
-Articles from different sources are downloaded and parsed into MongoDB starting from the last date of execution. Additional metadata such as disciplines and Wikimedia categories are then added. The images from the articles are downloaded and are supposed to be classified (work in progress). In our case the images are then moved to another server (this step can be removed in NOA_Pipeline.sh).  
+Articles from different sources are downloaded and parsed into MongoDB starting from the last date of execution. Additional metadata such as disciplines and Wikimedia categories are then added. The images from the articles are downloaded and will be classified (work in progress). In our case the images are then moved to another server (this step can be removed in NOA_Pipeline.sh).  
 For each execution temporary Mongo collections for articles, images and our Solr search engine are created. At the end of the pipeline these temporary collections are added to collections AllArticles, AllImages and AllImagesSolr, where all previous data is stored. The temporary collections can then optionally be removed automatically (uncomment line in FinishPipeline.py).
+Logs are stored in logs/pipelog_[date].txt. The output file configured in crontab must match the filename in FinishPipeline.py.
+
 
 ## System Requirements
 Java 8  
@@ -34,21 +36,21 @@ FinishPipeline.py
 These files are found in this repository in directories of the same name. In some cases the directoriy is listed in brackets after the filename. Jar files need to be build using Maven.
 
 **Data folder** (path set in config.ini):  
-wikihypernym.json  
-wikicats.json  
-w2v_noa.txt  
-translatedDisciplines.txt  
-checklines.txt  
+wikihypernym.json (created with wikicats/provided soon)  
+wikicats.json (created with wikicats/provided soon)  
+w2v_noa.txt (provided soon)  
+translatedDisciplines.txt (addDiscipline)  
+checklines.txt (PaperParser)  
 
 
 ## Setup
-Download nltk data with:
+1. Download nltk data with:
 ```console
 import nltk  
 nltk.download('all')
 ```
 
-Edit config.ini (The folder paths can be left at their default values.):  
+2. Edit config.ini (The folder paths can be left at their default values.):  
 mongoip = \<Your Mongo IP>  
 mongoport = \<Your Mongo PORT>  
 mongodb = \<Your Mongo DB>  
@@ -58,7 +60,7 @@ tmp_folder = \<folder for temporary files>
 img_folder = \<folder images are saved in>  
 article_folder = <folder articles are saved in; insert "none" to delete articles>  
 
-To automate pipeline execution a crontab can be set up:  
+3. To automate pipeline execution a crontab can be set up:  
 Change PATH in NOA_Pipeline.sh to the result of
 ```console
 echo $PATH
