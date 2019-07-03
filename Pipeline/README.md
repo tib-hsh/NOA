@@ -1,5 +1,7 @@
 # Pipeline
-This pipeline executes all programs from the NOA project in order to automate the workflow.
+This pipeline executes all programs from the NOA project in order to automate the workflow.  
+Articles from different sources are downloaded and parsed into MongoDB starting from the last date of execution. Additional metadata such as disciplines and Wikimedia categories are then added. The images from the articles are downloaded and are supposed to be classified (work in progress). In our case the images are then moved to another server (this step can be removed in NOA_Pipeline.sh).  
+For each execution temporary Mongo collections for articles, images and our Solr search engine are created. At the end of the pipeline these temporary collections are added to collections AllArticles, AllImages and AllImagesSolr, where all previous data is stored. The temporary collections can then optionally be removed automatically (uncomment line in FinishPipeline.py).
 
 ## System Requirements
 Java 8  
@@ -17,17 +19,19 @@ InitializePipeline.py
 DOAJUpdater.jar  
 PaperParser.jar  
 addDiscipline.jar  
-find_abbreviations.py  
-cluster_abbrev.py  
-find_secondary_abbreviations.py  
-findwikiterms.py  
-idf.py  
-assigncatsDS.py  
+find_abbreviations.py (Acronyms)  
+cluster_abbrev.py (Acronyms)  
+find_secondary_abbreviations.py (Acronyms)  
+findwikiterms.py (WikiThes)  
+idf.py (WikiThes)  
+assigncatsDS.py (WikiThes)  
 addwmIDS.jar  
 MakeDownloadFile.py  
 ImgDownloader.jar  
 CreateSolrDB.py  
-FinishPipeline.py  
+FinishPipeline.py
+
+These files are found in this repository in directories of the same name. In some cases the directoriy is listed in brackets after the filename. Jar files need to be build using Maven.
 
 **Data folder** (path set in config.ini):  
 wikihypernym.json  
