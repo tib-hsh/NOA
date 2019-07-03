@@ -6,41 +6,41 @@ Logs are stored in logs/pipelog_[date].txt. The output file configured in cronta
 
 
 ## System Requirements
-Java 8  
-MongoDB  
-Python 3  
-numpy  (tested with v1.14.3)  
-pymongo (tested with v3.4.0)  
-nltk (tested with v3.3)  
+- Java 8  
+- MongoDB  
+- Python 3  
+- numpy  (tested with v1.14.3)  
+- pymongo (tested with v3.4.0)  
+- nltk (tested with v3.3)  
 
 ## Required Files
 **Root folder:**  
-NOA_Pipeline.sh  
-config.ini  
-InitializePipeline.py  
-DOAJUpdater.jar  
-PaperParser.jar  
-addDiscipline.jar  
-find_abbreviations.py (Acronyms)  
-cluster_abbrev.py (Acronyms)  
-find_secondary_abbreviations.py (Acronyms)  
-findwikiterms.py (WikiThes)  
-idf.py (WikiThes)  
-assigncatsDS.py (WikiThes)  
-addwmIDS.jar  
-MakeDownloadFile.py  
-ImgDownloader.jar  
-CreateSolrDB.py  
-FinishPipeline.py
+- NOA_Pipeline.sh  
+- config.ini  
+- InitializePipeline.py  
+- DOAJUpdater.jar  
+- PaperParser.jar  
+- addDiscipline.jar  
+- find_abbreviations.py (Acronyms)  
+- cluster_abbrev.py (Acronyms)  
+- find_secondary_abbreviations.py (Acronyms)  
+- findwikiterms.py (WikiThes)  
+- idf.py (WikiThes)  
+- assigncatsDS.py (WikiThes)  
+- addwmIDS.jar  
+- MakeDownloadFile.py  
+- ImgDownloader.jar  
+- CreateSolrDB.py  
+- FinishPipeline.py
 
 These files are found in this repository in directories of the same name. In some cases the directoriy is listed in brackets after the filename. Jar files need to be build using Maven.
 
 **Data folder** (path set in config.ini):  
-wikihypernym.json (created with wikicats/provided soon)  
-wikicats.json (created with wikicats/provided soon)  
-w2v_noa.txt (provided soon)  
-translatedDisciplines.txt (addDiscipline)  
-checklines.txt (PaperParser)  
+- wikihypernym.json (created with wikicats/provided soon)  
+- wikicats.json (created with wikicats/provided soon)  
+- w2v_noa.txt (provided soon)  
+- translatedDisciplines.txt (addDiscipline)  
+- checklines.txt (PaperParser)  
 
 
 ## Setup
