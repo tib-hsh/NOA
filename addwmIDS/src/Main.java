@@ -20,7 +20,6 @@ public class Main {
 	static String mongoDB;
 	static String mongoCollection;
 	static long numberOfImages;
-	static int count = 0;
 
 	public static void main(String[] args) throws IOException {
 		File f = new File("config.ini");
@@ -147,8 +146,6 @@ public class Main {
 				ObjectId id = (ObjectId) image.get("_id");
 				BasicDBObject idquery = new BasicDBObject("_id", id);
 				collection.update(idquery, image);
-				count++;
-				System.out.print(count*100/numberOfImages + "%\r");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}		
