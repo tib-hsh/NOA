@@ -36,12 +36,13 @@ Logs are stored in logs/pipelog_[date].txt. The output file configured in cronta
 These files are found in this repository in directories of the same name. In some cases the directoriy is listed in brackets after the filename. Jar files need to be build using Maven.
 
 **Data folder** (path set in config.ini):  
-- wikihypernym.json (created with wikicats/provided soon)  
-- wikicats.json (created with wikicats/provided soon)  
+- wikihypernym.json (created with wikicats)  
+- wikicats.json (created with wikicats)  
 - w2v_noa.txt (provided soon)  
 - translatedDisciplines.txt (addDiscipline)  
 - checklines.txt (PaperParser)  
 
+For now all files can be found in pre-release v0.1.
 
 ## Setup
 1. Download nltk data with:
