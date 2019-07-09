@@ -54,7 +54,7 @@ python3 CreateSolrDB.py
 /usr/bin/scp -i /home/noa/.ssh/id_rsa -o 'ProxyJump noa@exchange.osl.tib.eu' -r /home/noa/PipelineTest/images noa@noa21.osl.tib.eu:/noa/pictures
 
 echo "------FinishPipeline------"
-python3 /home/noa/PipelineTest/FinishPipeline.py
+python3 FinishPipeline.py
 
 # also remove this step if images are supposed to stay on server
 rm -r images
