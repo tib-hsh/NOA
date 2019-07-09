@@ -297,7 +297,7 @@ public class MongoDBRepo {
 		d.append("numOfFindings", findings.size());
 		d.append("path2file", rsj.getXMLPathComplete());
 
-		if (rsj.getBody() != null && rsj.getTitle() != null && rsj.getJournalDOI() != null) {
+		if (rsj.getBody() != null && rsj.getBody() != "" && rsj.getTitle() != null && rsj.getTitle() != "" && rsj.getJournalDOI() != null && rsj.getJournalDOI() != "") {
 			try {
 				// db.getCollection("Version26.09.").insertOne(d);
 				for (Document y : findings) {
