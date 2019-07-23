@@ -1,0 +1,9 @@
+{
+  "name" : "NOA upload tool",
+  "title" : "NOA upload tool",
+  "description" : "Uploads images from open access articles found on noa.wp.hs-hannover.de",
+  "url" : "http://www.noa.wp.hs-hannover.de",
+  "keywords" : "images, Wikimedia Commons, scientific articles",
+  "author" : "Janko Happe, Lucia Sohmen",
+  "repository" : "https://github.com/tib-hsh/NOA/tree/master/SearchEngine"
+}
