@@ -1,4 +1,5 @@
-{
+[
+  {
   "name" : "NOA upload tool",
   "title" : "NOA upload tool",
   "description" : "Uploads images from open access articles - use the search to find an image, then upload by clicking the >>Upload to Wikimedia<< button.",
@@ -6,4 +7,14 @@
   "keywords" : "images, Wikimedia Commons, scientific articles",
   "author" : "Janko Happe, Lucia Sohmen",
   "repository" : "https://github.com/tib-hsh/NOA/tree/master/SearchEngine"
-}
+  },
+  {
+    "name" : "NOA rand-upload tool",
+    "title" : "NOA random upload tool",
+    "description" : "Finds random images from open access articles and lets users upload them",
+    "url" : "http://noa.wp.hs-hannover.de/random-upload.php",
+    "keywords" : "images, Wikimedia Commons, scientific articles",
+    "author" : "Janko Happe, Lucia Sohmen",
+    "repository" : "https://github.com/tib-hsh/NOA/tree/master/SearchEngine"
+  }
+]
