@@ -209,14 +209,24 @@ public class MongoDBRepo {
 
 			boolean downloading = withDownload;
 
+
+
 			int lengthOfTitle = 0;
 
 			int lengthOfBody = 0;
 			Document img = new Document();
 			img.put("_id", new ObjectId());
 
-			if (a.getLabel() != null)
-				lengthOfTitle = a.getLabel().length();
+			String captionTitle = "";
+			try{
+				captionTitle = a.getLabel();
+			}catch (NullPointerException e){
+
+			}
+
+			lengthOfTitle = captionTitle.length();
+
+
 
 			if (a.getCaptionBody() != null)
 				lengthOfBody = a.getCaptionBody().length();
@@ -250,13 +260,16 @@ public class MongoDBRepo {
 			}
 			a.setCopyrightFlag(copyrightFlag);
 
+
+
+
 			// insert TIB_URL
 
 			// Here are the Items of the Image Collection definied.
 			// Later added: discipline, wpterms, wpcats, acronym, imageType filled, TIB_URL
 			findings.add(img.append("findingID", a.getFindingID()).append("DOI", rsj.getJournalDOI())
 					.append("sourceID", d.get("_id")).append("title", rsj.getTitle())
-					.append("journalName", rsj.getJournalName()).append("captionTitle", a.getLabel())
+					.append("journalName", rsj.getJournalName()).append("captionTitle", captionTitle)
 					.append("captionBody", a.getCaptionBody()).append("captionTitleLength", lengthOfTitle)
 					.append("captionBodyLength", lengthOfBody).append("URL", s) // Note: New begin
 					.append("licenseType", licenseType).append("authors", Authors).append("imageType", "nay")
