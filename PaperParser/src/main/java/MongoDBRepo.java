@@ -260,10 +260,9 @@ public class MongoDBRepo {
 			}
 			a.setCopyrightFlag(copyrightFlag);
 
-
-
-
-			// insert TIB_URL
+			String tiburl = "images/"+rsj.getPublisher()+"/"+rsj.getJournalName().replaceAll(" ", "_")+"/"+rsj.getPublicationYear()+
+					"/"+rsj.getJournalDOI().replaceAll("/", "_")+"/"+a.getFindingID()+".jpg";
+			//images/ + str(publisher) + '/' + str(pathJournalName) + '/' + str(year) + '/' + str(DOI).replace('/', '_') + '/'str(findingID) + ".jpg"
 
 			// Here are the Items of the Image Collection definied.
 			// Later added: discipline, wpterms, wpcats, acronym, imageType filled, TIB_URL
@@ -271,8 +270,8 @@ public class MongoDBRepo {
 					.append("sourceID", d.get("_id")).append("title", rsj.getTitle())
 					.append("journalName", rsj.getJournalName()).append("captionTitle", captionTitle)
 					.append("captionBody", a.getCaptionBody()).append("captionTitleLength", lengthOfTitle)
-					.append("captionBodyLength", lengthOfBody).append("URL", s) // Note: New begin
-					.append("licenseType", licenseType).append("authors", Authors).append("imageType", "nay")
+					.append("captionBodyLength", lengthOfBody).append("URL", s).append("TIB_URL", tiburl) // Note: New begin
+					.append("licenseType", licenseType).append("license", rsj.getLicense()).append("authors", Authors).append("imageType", "nay")
 					.append("pubYear", pdate.get("year")).append("pubMonth", pdate.get("month"))
 					.append("pubDay", pdate.get("day")).append("publisher", rsj.getPublisher())
 					.append("context", a.getContext()).append("copyrightFlag", a.isCopyrightFlag()));
