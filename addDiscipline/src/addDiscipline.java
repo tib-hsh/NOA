@@ -25,6 +25,7 @@ public class addDiscipline {
 	static String mongoAdress;
 	static String dbName;
 	static String collectionName;
+	static String imageCollectionName;
 	static String dataFolder = "";
 	static String tmpFolder = "";
 
@@ -36,6 +37,7 @@ public class addDiscipline {
 			mongoAdress = "mongodb://" + ini.get("DEFAULT", "mongoip") + "/" + ini.get("DEFAULT", "mongoport");
 			dbName = ini.get("DEFAULT", "mongodb");
 			collectionName = ini.get("DEFAULT", "article_collection");
+			imageCollectionName = ini.get("DEFAULT", "image_collection");
 			dataFolder = ini.get("DEFAULT", "data_folder") + "/";
 			tmpFolder = ini.get("DEFAULT", "tmp_folder") + "/";
 		}
@@ -43,6 +45,7 @@ public class addDiscipline {
 		MongoClient mongoClient = new MongoClient(new MongoClientURI(mongoAdress));
 		DB database = mongoClient.getDB(dbName);
 		DBCollection collection = database.getCollection(collectionName);
+		DBCollection imageCollection = database.getCollection(imageCollectionName);
 		DBObject query = new BasicDBObject("journalName", new BasicDBObject("$exists", true));
 		List<String> journals = collection.distinct("journalName", query);
 		int i = 0;
@@ -175,6 +178,7 @@ public class addDiscipline {
 		MongoClient mongoClient = new MongoClient(new MongoClientURI(mongoAdress));
 		DB database = mongoClient.getDB(dbName);
 		DBCollection collection = database.getCollection(collectionName);
+		DBCollection imageCollection = database.getCollection(imageCollectionName);
 
 		int i = 0;
 		for (Map.Entry<String, List<String>> entry : map.entrySet()) {
@@ -184,6 +188,7 @@ public class addDiscipline {
 			BasicDBObject newDocument = new BasicDBObject();
 			newDocument.append("$set", new BasicDBObject().append("discipline", entry.getValue()));
 			collection.updateMulti(query, newDocument);
+			imageCollection.updateMulty(query, newDocument);
 
 		}
 		mongoClient.close();
