@@ -188,7 +188,7 @@ public class addDiscipline {
 			BasicDBObject newDocument = new BasicDBObject();
 			newDocument.append("$set", new BasicDBObject().append("discipline", entry.getValue()));
 			collection.updateMulti(query, newDocument);
-			imageCollection.updateMulty(query, newDocument);
+			imageCollection.updateMulti(query, newDocument);
 
 		}
 		mongoClient.close();
