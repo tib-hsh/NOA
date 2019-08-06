@@ -212,7 +212,6 @@ public class MongoDBRepo {
 
 
 			int lengthOfTitle = 0;
-
 			int lengthOfBody = 0;
 			Document img = new Document();
 			img.put("_id", new ObjectId());
@@ -220,13 +219,10 @@ public class MongoDBRepo {
 			String captionTitle = "";
 			try{
 				captionTitle = a.getLabel();
+				lengthOfTitle = captionTitle.length();
 			}catch (NullPointerException e){
 
 			}
-
-			lengthOfTitle = captionTitle.length();
-
-
 
 			if (a.getCaptionBody() != null)
 				lengthOfBody = a.getCaptionBody().length();
@@ -260,9 +256,8 @@ public class MongoDBRepo {
 			}
 			a.setCopyrightFlag(copyrightFlag);
 
-			String tiburl = "images/"+rsj.getPublisher()+"/"+rsj.getJournalName().replaceAll(" ", "_")+"/"+rsj.getPublicationYear()+
+			String tiburl = "images/"+rsj.getSource()+"/"+rsj.getJournalName().replaceAll(" ", "_")+"/"+rsj.getPublicationYear()+
 					"/"+rsj.getJournalDOI().replaceAll("/", "_")+"/"+a.getFindingID()+".jpg";
-			//images/ + str(publisher) + '/' + str(pathJournalName) + '/' + str(year) + '/' + str(DOI).replace('/', '_') + '/'str(findingID) + ".jpg"
 
 			// Here are the Items of the Image Collection definied.
 			// Later added: discipline, wpterms, wpcats, acronym, imageType filled, TIB_URL
