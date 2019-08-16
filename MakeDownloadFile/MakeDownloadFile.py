@@ -37,7 +37,10 @@ for f in findings:
         findingID = image['findingID']
         path2file = f['path2file']
         publisher = str(f['source'])
-        path = publisher + '/' + pathJournalName + '/' + year + '/' + Dumb_DOI + '/'
+        try:
+            path = publisher + '/' + pathJournalName + '/' + year + '/' + Dumb_DOI + '/'
+        except:
+            print ("MakeDownloadFile: Error with " + DOI)
         root = "images/"
         imagecount += 1
         with open(tmp_folder + "/DownloadURLs.txt", 'a', encoding="utf-8") as myfile:
