@@ -6,12 +6,8 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3fe8b336-f180-4e5b-97a5-64e8341fa6e9" name="Default" comment="tiburl to allimages">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/NOA - FOR PUBLISHING.iml" afterPath="$PROJECT_DIR$/.idea/NOA - FOR PUBLISHING.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+    <list default="true" id="3fe8b336-f180-4e5b-97a5-64e8341fa6e9" name="Default" comment="clarified pipeline process">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Pipeline/NOA_Pipeline.sh" afterPath="$PROJECT_DIR$/Pipeline/NOA_Pipeline.sh" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Pipeline/README.md" afterPath="$PROJECT_DIR$/Pipeline/README.md" />
     </list>
     <ignored path="$PROJECT_DIR$/PaperParser/target/" />
     <ignored path="$PROJECT_DIR$/addDiscipline/target/" />
@@ -78,8 +74,8 @@
       <file leaf-file-name="SpringerDownloader.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/DOAJUpdater/src/SpringerDownloader.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="214">
-              <caret line="14" column="8" lean-forward="true" selection-start-line="14" selection-start-column="8" selection-end-line="14" selection-end-column="8" />
+            <state relative-caret-position="403">
+              <caret line="23" column="13" lean-forward="true" selection-start-line="23" selection-start-column="13" selection-end-line="23" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -793,7 +789,14 @@
       <option name="project" value="LOCAL" />
       <updated>1571389222387</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="clarified pipeline process">
+      <created>1571389376734</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1571389376734</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -865,7 +868,8 @@
     <MESSAGE value="tiburl to allimages - fixed bug" />
     <MESSAGE value="error handling" />
     <MESSAGE value="changed licences + file endings" />
-    <option name="LAST_COMMIT_MESSAGE" value="changed licences + file endings" />
+    <MESSAGE value="clarified pipeline process" />
+    <option name="LAST_COMMIT_MESSAGE" value="clarified pipeline process" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1194,8 +1198,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/DOAJUpdater/src/SpringerDownloader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="214">
-          <caret line="14" column="8" lean-forward="true" selection-start-line="14" selection-start-column="8" selection-end-line="14" selection-end-column="8" />
+        <state relative-caret-position="403">
+          <caret line="23" column="13" lean-forward="true" selection-start-line="23" selection-start-column="13" selection-end-line="23" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
