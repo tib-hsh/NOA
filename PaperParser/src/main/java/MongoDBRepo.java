@@ -152,7 +152,7 @@ public class MongoDBRepo {
 		String license = (String) rsj.getLicense();
 		String licenseType = "";
 		if (license == null) {
-			licenseType = "invalid";
+			licenseType = "Please follow the link to the original article to find out about permissions";
 		} else if (license.contains("creativecommons.org/licenses/by/4.0")) {
 			licenseType = "cc-by-4.0";
 		} else if (license.contains("creativecommons.org/licenses/by/3.0")) {
@@ -164,7 +164,7 @@ public class MongoDBRepo {
 		} else if (license.contains("www.frontiersin.org/licenseagreement")) {
 			licenseType = "frontiers";
 		} else {
-			licenseType = "nay";
+			licenseType = "Please follow the link to the original article to find out about permissions";
 		}
 
 		for (Result a : rsj.getResultList()) {
@@ -255,9 +255,9 @@ public class MongoDBRepo {
 
 			}
 			a.setCopyrightFlag(copyrightFlag);
-
+			String[] urlparts = s.split("\\.");
 			String tiburl = "images/"+rsj.getSource()+"/"+rsj.getJournalName().replaceAll(" ", "_")+"/"+rsj.getPublicationYear()+
-					"/"+rsj.getJournalDOI().replaceAll("/", "_")+"/"+a.getFindingID()+".jpg";
+					"/"+rsj.getJournalDOI().replaceAll("/", "_")+"/"+a.getFindingID()+ "." +urlparts[(urlparts.length-1)];
 
 			// Here are the Items of the Image Collection definied.
 			// Later added: discipline, wpterms, wpcats, acronym, imageType filled, TIB_URL
