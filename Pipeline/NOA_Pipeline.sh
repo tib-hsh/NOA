@@ -1,7 +1,6 @@
 #!/bin/sh
-
-# replace this with the output from "echo $PATH"
 PATH=/home/noa/anaconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin
+# replace this with the output from "echo $PATH"
 
 echo "------InitializePipeline------"
 python3 InitializePipeline.py
@@ -43,7 +42,7 @@ echo "------MakeDownloadFile------"
 python3 MakeDownloadFile.py
 
 echo "------ImgDownloader------"
-java -jar ImgDownloader.jar tmp/DownloadURLs.txt
+java -jar ImgDownloader.jar DownloadURLs.txt
 
 echo "------CreateSolrDB------"
 python3 CreateSolrDB.py

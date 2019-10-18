@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/NOA - FOR PUBLISHING.iml" filepath="$PROJECT_DIR$/.idea/NOA - FOR PUBLISHING.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PaperParser/PaperParser.iml" filepath="$PROJECT_DIR$/PaperParser/PaperParser.iml" />
+      <module fileurl="file://$PROJECT_DIR$/addDiscipline/addDiscipline.iml" filepath="$PROJECT_DIR$/addDiscipline/addDiscipline.iml" />
     </modules>
   </component>
 </project>

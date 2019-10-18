@@ -62,7 +62,10 @@ date = \<initial start date (yyyy-MM-dd); this only needs to be set once>
 data_folder = \<data folder>  
 tmp_folder = \<folder for temporary files>  
 img_folder = \<folder images are saved in>  
-article_folder = <folder articles are saved in; insert "none" to delete articles>  
+article_folder = <folder articles are saved in; insert "none" to delete articles>
+
+
+ Note: The variable "date" is the date of the earliest article this pipeline will find. This is automatically changed to the current date every time the pipeline is run.
 
 4. To automate pipeline execution a crontab can be set up:  
 Change PATH in NOA_Pipeline.sh to the output of:
